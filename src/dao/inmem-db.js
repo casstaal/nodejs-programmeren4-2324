@@ -110,11 +110,29 @@ const database = {
     change(item, userId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
-            this._data[userId] = item
+            try {
+                console.log('UserID: ' + userId)
+                assert.ok(
+                    this.checkIfIDExists(userId),
+                    'This ID does not exist'
+                )
+                console.log('userId: ' + userId)
+                let arrayPosition = this.getArrayPositionOfUserID(userId)
+                item.id = userId
+                this._data[arrayPosition] = item
+
+                // Roep de callback aan het einde van de operatie
+                // met het toegevoegde item als argument, of null als er een fout is opgetreden
+                callback(null, item)
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
+            // this._data[userId] = item
 
             // Roep de callback aan het einde van de operatie
             // met het toegevoegde item als argument, of null als er een fout is opgetreden
-            callback(null, item)
+            // callback(null, item)
         }, this._delayTime)
     },
 

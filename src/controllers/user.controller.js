@@ -95,9 +95,13 @@ let userController = {
     changeUser: (req, res, next) => {
         const userId = req.params.userId
         const myUserId = userId[1]
+
+        const numberUserId = parseInt(myUserId)
+        console.log('correct userid: ' + numberUserId)
+
         const user = req.body
 
-        userService.changeUser(user, myUserId, (error, success) => {
+        userService.changeUser(user, numberUserId, (error, success) => {
             if (error) {
                 return next({
                     status: error.status,
