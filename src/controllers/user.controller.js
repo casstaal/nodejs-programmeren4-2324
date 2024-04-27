@@ -74,7 +74,10 @@ let userController = {
         const userId = req.params.userId
         const myUserId = userId[1]
 
-        userService.deleteUser(myUserId, (error, success) => {
+        const numberUserId = parseInt(myUserId)
+        console.log('correct userid: ' + numberUserId)
+
+        userService.deleteUser(numberUserId, (error, success) => {
             if (error) {
                 return next({
                     status: error.status,

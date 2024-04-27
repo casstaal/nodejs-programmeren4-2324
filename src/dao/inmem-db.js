@@ -42,15 +42,6 @@ const database = {
     getById(userId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
-            // if (userId < 0 || userId >= this._data.length) {
-            //     callback(
-            //         { message: `Error: id ${userId} does not exist!` },
-            //         null
-            //     )
-            // } else {
-            //     callback(null, this._data[userId])
-            // }
-            // callback(null, this._data[id])
             try {
                 console.log('UserID: ' + userId)
                 assert.ok(
@@ -95,14 +86,22 @@ const database = {
     delete(userId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
-            if (userId < 0 || userId >= this._data.length) {
-                callback(
-                    { message: `Error: id ${userId} does not exist!` },
-                    null
+            try {
+                console.log('UserID: ' + userId)
+                assert.ok(
+                    this.checkIfIDExists(userId),
+                    'This ID does not exist'
                 )
-            } else {
-                this._data.splice(userId, 1)
-                callback(null, userId)
+                console.log('userId: ' + userId)
+                let arrayPosition = this.getArrayPositionOfUserID(userId)
+
+                this._data.splice(arrayPosition, 1)
+                // Roep de callback aan het einde van de operatie
+                // met het toegevoegde item als argument, of null als er een fout is opgetreden
+                callback(null, this._data[arrayPosition])
+            } catch (error) {
+                console.error(error)
+                callback(error)
             }
         }, this._delayTime)
     },
