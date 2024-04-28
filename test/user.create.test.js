@@ -7,7 +7,7 @@ chai.should()
 chai.use(chaiHttp)
 tracer.setLevel('warn')
 
-const endpointToTest = '/api/user'
+const endpointToTest = '/api/users'
 
 describe('UC201 Registreren als nieuwe user', () => {
     /**
@@ -40,7 +40,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                 chai.expect(res.body).to.have.property('status').equals(400)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('Missing or incorrect firstName field')
+                    .equals('First name is missing or is not a string')
                 chai
                     .expect(res.body)
                     .to.have.property('data')
@@ -61,11 +61,32 @@ describe('UC201 Registreren als nieuwe user', () => {
         done()
     })
 
-    it.skip('TC-201-4 Gebruiker bestaat al', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
-        done()
+    it('TC-201-4 Gebruiker bestaat al', (done) => {
+        chai.request(server)
+            .post(endpointToTest)
+            .send({
+                firstName: 'Voornaam',
+                lastName: 'Achternaam',
+                emailAdress: 'm@server.nl'
+            })
+            .end((err, res) => {
+                /**
+                 * Voorbeeld uitwerking met chai.expect
+                 */
+                chai.expect(res).to.have.status(500)
+                chai.expect(res).not.to.have.status(200)
+                chai.expect(res.body).to.be.a('object')
+                chai.expect(res.body).to.have.property('status').equals(500)
+                chai.expect(res.body)
+                    .to.have.property('message')
+                    .equals('An user with this emailaddress already exists')
+                chai
+                    .expect(res.body)
+                    .to.have.property('data')
+                    .that.is.a('object').that.is.empty
+
+                done()
+            })
     })
 
     it('TC-201-5 Gebruiker succesvol geregistreerd', (done) => {
