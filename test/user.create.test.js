@@ -22,7 +22,7 @@ describe('UC201 Registreren als nieuwe user', () => {
     /**
      * Hier starten de testcases
      */
-    it('TC-201-1 Verplicht veld ontbreekt', (done) => {
+    it('TC-201-1 Verplicht veld ontbreekt', (done) => { 
         chai.request(server)
             .post(endpointToTest)
             .send({
@@ -51,13 +51,72 @@ describe('UC201 Registreren als nieuwe user', () => {
     })
 
     it.skip('TC-201-2 Niet-valide email adres', (done) => {
+        chai.request(server)
+        .post(endpointToTest)
+        .send({
+            firstName: 'Voornaam',
+            lastName: 'Achternaam',
+            emailAdress: 'mserver.nl',
+            isActive: true,
+            password: 'testPassword2!',
+            phoneNumber: '+06 123456789',
+            roles: 'chef',
+            street: 'Hogeschoollaan',
+            city: 'Breda'
+        })
+        .end((err, res) => {
+            /**
+             * Voorbeeld uitwerking met chai.expect
+             */
+            chai.expect(res).to.have.status(500)
+            chai.expect(res).not.to.have.status(200)
+            chai.expect(res.body).to.be.a('object')
+            chai.expect(res.body).to.have.property('status').equals(500)
+            chai.expect(res.body)
+                .to.have.property('message')
+                .equals('The email address is not valid. An example of a valid email address is this: test@test.com')
+            chai
+                .expect(res.body)
+                .to.have.property('data')
+                .that.is.a('object').that.is.empty
+
+            done()
+        })
         done()
     })
 
-    it.skip('TC-201-3 Niet-valide password', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
+    it('TC-201-3 Niet-valide password', (done) => {
+        chai.request(server)
+            .post(endpointToTest)
+            .send({
+                firstName: 'Voornaam',
+                lastName: 'Achternaam',
+                emailAdress: 'm@server.nl',
+                isActive: true,
+                password: 'testPassword2',
+                phoneNumber: '+06 123456789',
+                roles: 'chef',
+                street: 'Hogeschoollaan',
+                city: 'Breda'
+            })
+            .end((err, res) => {
+                /**
+                 * Voorbeeld uitwerking met chai.expect
+                 */
+                chai.expect(res).to.have.status(500)
+                chai.expect(res).not.to.have.status(200)
+                chai.expect(res.body).to.be.a('object')
+                chai.expect(res.body).to.have.property('status').equals(500)
+                chai.expect(res.body)
+                    .to.have.property('message')
+                    .equals('A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character')
+                chai
+                    .expect(res.body)
+                    .to.have.property('data')
+                    .that.is.a('object').that.is.empty
+
+                done()
+            })
         done()
     })
 

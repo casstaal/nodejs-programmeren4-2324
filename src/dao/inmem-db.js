@@ -81,7 +81,11 @@ const database = {
                 )
                 assert.ok(
                     this.checkPassword(item.password),
-                    'A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
+                    'The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
+                )
+                assert.ok(
+                    this.checkIfEmailIsValid(item.emailAdress),
+                    'The email address is not valid. An example of a valid email address is this: test@test.com'
                 )
                 // Proceed with your logic here
                 // Add an id and add the item to the database
@@ -211,6 +215,11 @@ const database = {
             numberPattern.test(password) &&
             specialCharPattern.test(password)
         )
+    },
+
+    checkIfEmailIsValid(email) { 
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
     }
 }
 
