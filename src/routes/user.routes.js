@@ -65,7 +65,7 @@ const validateUser = (req, res, next) => {
 
 // Userroutes
 router.post('/api/users', validateUser, userController.create)
-router.get('/api/users', userController.getAll)
+router.get('/api/user', userController.getAll)
 router.get('/api/users/:userId', userController.getById)
 router.delete('/api/users/:userId', userController.deleteUser)
 router.put('/api/users/:userId', userController.changeUser)

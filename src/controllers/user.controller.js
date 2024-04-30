@@ -26,6 +26,8 @@ let userController = {
     },
 
     getAll: (req, res, next) => {
+        // const queryField = Object.entries(req.query)
+
         userService.getAll((error, success) => {
             if (error) {
                 return next({
@@ -35,6 +37,7 @@ let userController = {
                 })
             }
             if (success) {
+                // console.log(`Dit is field 1: ${queryField[0][0]} = ${queryField[0][1]}`)
                 res.status(200).json({
                     status: 200,
                     message: success.message,
