@@ -79,6 +79,10 @@ const database = {
                     !this.checkIfEmailExists(item.emailAdress),
                     'An user with this emailaddress already exists'
                 )
+                assert.ok(
+                    this.checkPassword(item.password),
+                    'A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
+                )
                 // Proceed with your logic here
                 // Add an id and add the item to the database
                 item.id = this._index++
@@ -188,6 +192,25 @@ const database = {
             }
         }
         return arrayPosition
+    },
+
+    checkPassword(password) {
+        //[A-Z] matches any uppercase letter
+        let upperCasePattern = /[A-Z]/
+        //[a-z] matches any lowercase letter
+        let lowerCasePattern = /[a-z]/
+        //\d matches any digit character.
+        let numberPattern = /\d/
+        //[^A-Za-z0-9] is added to match any character that is not an uppercase letter, lowercase letter, or a digit.
+        let specialCharPattern = /[^A-Za-z0-9]/
+
+        return (
+            password.length >= 8 &&
+            upperCasePattern.test(password) &&
+            lowerCasePattern.test(password) &&
+            numberPattern.test(password) &&
+            specialCharPattern.test(password)
+        )
     }
 }
 

@@ -5,7 +5,17 @@ const assert = require('assert')
 
 const validateUser = (req, res, next) => {
     let user = req.body
-    let { firstName, lastName, emailAdress } = user
+    let {
+        firstName,
+        lastName,
+        emailAdress,
+        isActive,
+        password,
+        phoneNumber,
+        roles,
+        street,
+        city
+    } = user
     try {
         assert(
             typeof firstName === 'string',
@@ -31,7 +41,7 @@ const validateUser = (req, res, next) => {
             typeof phoneNumber === 'string',
             'Phonenumber is missing or is not a string'
         )
-        assert(typeof role === 'string', 'Roles is missing or is not a string')
+        assert(typeof roles === 'string', 'Roles is missing or is not a string')
         assert(
             typeof street === 'string',
             'Street is missing or is not a string'
