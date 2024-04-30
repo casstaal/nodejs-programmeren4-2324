@@ -19,6 +19,24 @@ const validateUser = (req, res, next) => {
             typeof emailAdress === 'string',
             'Email address is missing or is not a string'
         )
+        assert(
+            typeof isActive === 'boolean',
+            'isActive is missing or is not a boolean'
+        )
+        assert(
+            typeof password === 'string',
+            'Password is missing or is not a string'
+        )
+        assert(
+            typeof phoneNumber === 'string',
+            'Phonenumber is missing or is not a string'
+        )
+        assert(typeof role === 'string', 'Roles is missing or is not a string')
+        assert(
+            typeof street === 'string',
+            'Street is missing or is not a string'
+        )
+        assert(typeof city === 'string', 'City is missing or is not a string')
         next()
     } catch (err) {
         console.log(err)
