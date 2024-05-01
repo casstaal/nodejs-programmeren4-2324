@@ -130,6 +130,16 @@ const database = {
                 console.log('userId: ' + userId)
                 let arrayPosition = this.getArrayPositionOfUserID(userId)
                 item.id = userId
+
+                const oldEmail = this._data[arrayPosition].emailAdress
+                const newEmail = item.emailAdress
+
+                if(oldEmail === newEmail) {
+                    this.checkUserData(item, true)
+                } else {
+                    this.checkUserData(item, false)
+                }
+
                 this._data[arrayPosition] = item
 
                 // Roep de callback aan het einde van de operatie
@@ -224,11 +234,18 @@ const database = {
         return regex.test(phoneNumber)
     },
 
-    checkUserData(item) {
-        assert.ok(
-            !this.checkIfEmailExists(item.emailAdress),
-            'An user with this emailaddress already exists'
-        )
+    checkUserData(item, emailExists) {
+        // The boolean emailExists is used for the change user method. If you want to change the user, but the email stays the same it should be possible. 
+        // So a boolean is passed as a parameter. If this boolean is false it means that the email is changed in the change method and it should be checked.
+        // If the boolean is true, it means that it stays the same in the change method and that it shouldn't be checked. Because if you would check this email
+        // You would get an error saying this emailaddress already exists.
+        if(emailExists === false) {
+            assert.ok(
+                !this.checkIfEmailExists(item.emailAdress),
+                'An user with this emailaddress already exists'
+            )
+        }
+        
         assert.ok(
             this.checkPassword(item.password),
             'The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
