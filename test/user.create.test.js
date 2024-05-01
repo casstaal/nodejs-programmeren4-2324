@@ -28,7 +28,14 @@ describe('UC201 Registreren als nieuwe user', () => {
             .send({
                 // firstName: 'Voornaam', ontbreekt
                 lastName: 'Achternaam',
-                emailAdress: 'v.a@server.nl'
+                emailAdress: 'v.a@server.nl',
+                isActive: true,
+                password: 'testPassword2$',
+                phoneNumber: '+31 612345678',
+                roles: 'chef',
+                street: 'Hogeschoollaan',
+                city: 'Breda',
+                postalCode: '3825 NK'
             })
             .end((err, res) => {
                 /**
@@ -59,10 +66,11 @@ describe('UC201 Registreren als nieuwe user', () => {
             emailAdress: 'test.nl',
             isActive: true,
             password: 'testPassword2!',
-            phoneNumber: '+06 123456789',
+            phoneNumber: '+31 612345678',
             roles: 'chef',
             street: 'Hogeschoollaan',
-            city: 'Breda'
+            city: 'Breda',
+            postalCode: '3825 NK'
         })
         .end((err, res) => {
             /**
@@ -93,10 +101,11 @@ describe('UC201 Registreren als nieuwe user', () => {
                 emailAdress: 'henkJan@server.nl',
                 isActive: true,
                 password: 'testPassword2',
-                phoneNumber: '+06 123456789',
+                phoneNumber: '+31 612345678',
                 roles: 'chef',
                 street: 'Hogeschoollaan',
-                city: 'Breda'
+                city: 'Breda',
+                postalCode: '3825 NK'
             })
             .end((err, res) => {
                 /**
@@ -127,10 +136,11 @@ describe('UC201 Registreren als nieuwe user', () => {
                 emailAdress: 'm@server.nl',
                 isActive: true,
                 password: 'testPassword2$',
-                phoneNumber: '+06 123456789',
+                phoneNumber: '+31 612345678',
                 roles: 'chef',
                 street: 'Hogeschoollaan',
-                city: 'Breda'
+                city: 'Breda',
+                postalCode: '3825 NK'
             })
             .end((err, res) => {
                 /**
@@ -161,10 +171,11 @@ describe('UC201 Registreren als nieuwe user', () => {
                 emailAdress: 'test@server.nl',
                 isActive: true,
                 password: 'testPassword2$',
-                phoneNumber: '+06 123456789',
+                phoneNumber: '+31 612345678',
                 roles: 'chef',
                 street: 'Hogeschoollaan',
-                city: 'Breda'
+                city: 'Breda',
+                postalCode: '3825 NK'
 
             })
             .end((err, res) => {
@@ -180,10 +191,11 @@ describe('UC201 Registreren als nieuwe user', () => {
                 data.should.have.property('emailAdress').equals('test@server.nl')
                 data.should.have.property('isActive').that.is.a('boolean')
                 data.should.have.property('password').equals('testPassword2$')
-                data.should.have.property('phoneNumber').equals('+06 123456789')
+                data.should.have.property('phoneNumber').equals('+31 612345678')
                 data.should.have.property('roles').equals('chef')
                 data.should.have.property('street').equals('Hogeschoollaan')
                 data.should.have.property('city').equals('Breda')
+                data.should.have.property('postalCode').equals('3825 NK')
 
                 data.should.have.property('id').that.is.a('number')
 

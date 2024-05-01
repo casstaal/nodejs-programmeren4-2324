@@ -77,7 +77,7 @@ const database = {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
             try {
-                this.checkUserData(item)
+                this.checkUserData(item, false)
             
                 // Proceed with your logic here
                 // Add an id and add the item to the database
