@@ -21,7 +21,8 @@ const database = {
             phoneNumber: '+06 123456789',
             roles: 'chef',
             street: 'Hogeschoollaan',
-            city: 'Breda'
+            city: 'Breda',
+            postalCode: '3876 UK'
         },
         {
             id: 1,
@@ -34,7 +35,8 @@ const database = {
             phoneNumber: '+06 123456789',
             roles: 'server',
             street: 'Hogeschoollaan',
-            city: 'Breda'
+            city: 'Breda',
+            postalCode: '3928 KN'
         }
     ],
 
@@ -75,18 +77,8 @@ const database = {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
             try {
-                assert.ok(
-                    !this.checkIfEmailExists(item.emailAdress),
-                    'An user with this emailaddress already exists'
-                )
-                assert.ok(
-                    this.checkPassword(item.password),
-                    'The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
-                )
-                assert.ok(
-                    this.checkIfEmailIsValid(item.emailAdress),
-                    'The email address is not valid. An example of a valid email address is this: test@test.com'
-                )
+                this.checkUserData(item)
+            
                 // Proceed with your logic here
                 // Add an id and add the item to the database
                 item.id = this._index++
@@ -218,8 +210,41 @@ const database = {
     },
 
     checkIfEmailIsValid(email) { 
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         return regex.test(email);
+    },
+
+    validatePostalCode(postalCode) {
+        const regex = /^[1-9][0-9]{3} ?(?!sa|sd|ss)[A-Z]{2}$/
+        return regex.test(postalCode)
+    },
+
+    validatePhoneNumber(phoneNumber) {
+        const regex = /^\(?([+]31|0031|0)? -?6(\s?|-) ?([0-9]\s{0,3}){8}$/
+        return regex.test(phoneNumber)
+    },
+
+    checkUserData(item) {
+        assert.ok(
+            !this.checkIfEmailExists(item.emailAdress),
+            'An user with this emailaddress already exists'
+        )
+        assert.ok(
+            this.checkPassword(item.password),
+            'The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
+        )
+        assert.ok(
+            this.checkIfEmailIsValid(item.emailAdress),
+            'The email address is not valid. An example of a valid email address is this: test@test.com'
+        )
+        assert.ok(
+            this.validatePostalCode(item.postalCode),
+            'The postalcode is not valid. An example of a valid postalcode is: 1234 HG'
+        )
+        assert.ok(
+            this.validatePhoneNumber(item.phoneNumber),
+            'The phone number is not valid. An example of a valid phone number is: +31672344624'
+        )
     }
 }
 

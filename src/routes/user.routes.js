@@ -14,7 +14,8 @@ const validateUser = (req, res, next) => {
         phoneNumber,
         roles,
         street,
-        city
+        city,
+        postalCode
     } = user
     try {
         assert(
@@ -47,6 +48,7 @@ const validateUser = (req, res, next) => {
             'Street is missing or is not a string'
         )
         assert(typeof city === 'string', 'City is missing or is not a string')
+        assert(typeof postalCode === 'string', 'Postalcode is missing or is not a string')
         next()
     } catch (err) {
         console.log(err)
