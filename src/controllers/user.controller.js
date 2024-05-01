@@ -80,11 +80,20 @@ let userController = {
 
 
                     const filteredData = success.data.filter(item => item[queryField1] === queryValue1 && item[queryField2] === queryValue2)
-                    res.status(200).json({
-                        status: 200,
-                        message: 'Gefilterd op 2 parameters',
-                        data: filteredData
-                    })
+
+                    if(filteredData.length === 0) {
+                        res.status(200).json({
+                            status: 200,
+                            message: 'Er zijn geen gebruikers die aan uw zoekterm voldoen',
+                            data: filteredData
+                        })
+                    } else {
+                        res.status(200).json({
+                            status: 200,
+                            message: 'Gefilterd op 2 parameters',
+                            data: filteredData
+                        })
+                    }
                 } else if(queryField.length === 1) {
                     console.log(`Dit is field 1 ${queryField[0][0]} = ${queryField[0][1]}`)
                     const queryFieldLength1 = queryField[0][0]
@@ -110,12 +119,22 @@ let userController = {
                     // let myBool = (queryField[0][1] === 'true')
                     // let parameter = queryField[0][0]
                     const filteredData = success.data.filter(item => item[queryFieldLength1] === queryValueLength1)
+
+                    if(filteredData.length === 0) {
+                        res.status(200).json({
+                            status: 200,
+                            message: 'Er zijn geen gebruikers die aan uw zoekterm voldoen',
+                            data: filteredData
+                        })
+                    } else {
+                        res.status(200).json({
+                            status: 200,
+                            message: 'Gefilterd op 1 parameter',
+                            data: filteredData
+                        })
+                    }
                     
-                    res.status(200).json({
-                        status: 200,
-                        message: 'Gefilterd op 1 parameter',
-                        data: filteredData
-                    })
+                    
                 } else if(queryField.length === 0) {
                     res.status(200).json({
                         status: 200,
@@ -125,7 +144,7 @@ let userController = {
                 } else {
                     res.status(200).json({
                         status: 200,
-                        message: 'Er zijn geen gebruikers die aan uw filter voldoen',
+                        message: 'Er zijn geen gebruikers die aan uw zoekterm voldoen',
                         data: {}
                     })
                 }
