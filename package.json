@@ -15,7 +15,7 @@
         "avans",
         "programmeren-4"
     ],
-    "author": "Robin",
+    "author": "Cas Staal",
     "license": "ISC",
     "prettier": {
         "singleQuote": true,
