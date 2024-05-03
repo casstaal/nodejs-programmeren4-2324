@@ -7,7 +7,7 @@ chai.should()
 chai.use(chaiHttp)
 tracer.setLevel('warn')
 
-const endpointToTest = '/api/users'
+const endpointToTest = '/api/user'
 
 describe('UC201 Registreren als nieuwe user', () => {
     /**

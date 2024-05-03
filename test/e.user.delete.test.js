@@ -22,7 +22,7 @@ describe('UC206 Verwijderen van user', () => {
      */
     it('TC-206-1 Gebruiker bestaat niet', (done) => { 
         chai.request(server)
-            .delete('/api/users/:3')
+            .delete('/api/user/:3')
             .end((err, res) => {
                 /**
                  * Voorbeeld uitwerking met chai.expect
@@ -53,7 +53,7 @@ describe('UC206 Verwijderen van user', () => {
 
     it('TC-206-4 Gebruiker succesvol verwijderd', (done) => {
         chai.request(server)
-            .delete('/api/users/:1')
+            .delete('/api/user/:1')
             .end((err, res) => {
                 /**
                  * Voorbeeld uitwerking met chai.expect

@@ -27,7 +27,7 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
 
     it('TC-204-2 Gebruiker-ID bestaat niet', (done) => {
         chai.request(server)
-            .get('/api/users/:3')
+            .get('/api/user/:3')
             
             .end((err, res) => {
                 /**
@@ -51,7 +51,7 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
 
     it('TC-204-3 Gebruiker-ID bestaat', (done) => {
         chai.request(server)
-            .get('/api/users/:0')
+            .get('/api/user/:0')
             
             .end((err, res) => {
                 chai.expect(res).to.have.status(200)

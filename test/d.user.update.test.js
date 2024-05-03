@@ -7,7 +7,7 @@ chai.should()
 chai.use(chaiHttp)
 tracer.setLevel('warn')
 
-const endpointToTest = '/api/users/:1'
+const endpointToTest = '/api/user/:1'
 
 describe('UC205 Updaten van usergegevens', () => {
     /**
@@ -98,7 +98,7 @@ describe('UC205 Updaten van usergegevens', () => {
 
     it('TC-205-4 Gebruiker bestaat niet', (done) => {
         chai.request(server)
-            .put('/api/users/:5')
+            .put('/api/user/:5')
             .send({
                 firstName: 'Henk',
                 lastName: 'Jan',
