@@ -195,6 +195,27 @@ const database = {
         }, this._delayTime)
     },
 
+    deleteMeal(mealId, callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            try {
+                assert.ok(
+                    this.checkIfMealIDExists(mealId),
+                    'This ID does not exist'
+                )
+                let arrayPosition = this.getArrayPositionOfMealID(mealId)
+
+                this._mealData.splice(arrayPosition, 1)
+                // Roep de callback aan het einde van de operatie
+                // met het toegevoegde item als argument, of null als er een fout is opgetreden
+                callback(null, {})
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
+        }, this._delayTime)
+    },
+
     change(item, userId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
