@@ -171,11 +171,7 @@ const database = {
     getArrayPositionOfUserID(id) {
         let arrayPosition = 0
         for (let i = 0; i < this._data.length; i++) {
-            console.log('entered for loop')
-            console.log(i)
-            console.log(this._data[i].id)
             if (this._data[i].id === id) {
-                console.log('entered if loop')
                 arrayPosition = i
             }
         }
