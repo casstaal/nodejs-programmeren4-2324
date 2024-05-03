@@ -114,6 +114,24 @@ const database = {
         }, this._delayTime)
     },
 
+    getMealById(mealId, callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            try {
+                assert.ok(
+                    this.checkIfMealIDExists(mealId),
+                    'This ID does not exist'
+                )
+                let arrayPosition = this.getArrayPositionOfMealID(mealId)
+
+                callback(null, this._mealData[arrayPosition])
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
+        }, this._delayTime)
+    },
+
     add(item, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
@@ -231,14 +249,29 @@ const database = {
         return false
     },
 
+    checkIfMealIDExists(parameterID) {
+        for (let i = 0; i < this._mealData.length; i++) {
+            if (this._mealData[i].id === parameterID) {
+                return true
+            }
+        }
+        return false
+    },
+
     getArrayPositionOfUserID(id) {
         let arrayPosition = 0
         for (let i = 0; i < this._data.length; i++) {
-            console.log('entered for loop')
-            console.log(i)
-            console.log(this._data[i].id)
             if (this._data[i].id === id) {
-                console.log('entered if loop')
+                arrayPosition = i
+            }
+        }
+        return arrayPosition
+    },
+
+    getArrayPositionOfMealID(id) {
+        let arrayPosition = 0
+        for (let i = 0; i < this._mealData.length; i++) {
+            if (this._mealData[i].id === id) {
                 arrayPosition = i
             }
         }

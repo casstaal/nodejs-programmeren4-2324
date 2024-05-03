@@ -7,7 +7,7 @@ const assert = require('assert')
 router.post('/api/meal', mealController.create)
 // router.put('/api/meal/:mealId', userController.getAll)
 router.get('/api/meal', mealController.getAll)
-// router.get('/api/meal/:mealId', userController.deleteUser)
+router.get('/api/meal/:mealId', mealController.getById)
 // router.delete('/api/meal/:mealId'  ,userController.changeUser)
 
 module.exports = router

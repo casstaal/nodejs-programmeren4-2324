@@ -27,7 +27,46 @@ const mealService = {
                 })
             }
         })
+    },
+
+    getById: (mealId, callback) => {
+        database.getMealById(mealId, (err, data) => {
+            if (err) {
+                callback(err, null)
+            } else {
+                callback(null, {
+                    message: `Found meal with id ${mealId}`,
+                    data: data
+                })
+            }
+        })
     }
+
+    // deleteUser: (userId, callback) => {
+    //     database.delete(userId, (err, data) => {
+    //         if (err) {
+    //             callback(err, null)
+    //         } else {
+    //             callback(null, {
+    //                 message: `User deleted with id ${userId}.`,
+    //                 data: data
+    //             })
+    //         }
+    //     })
+    // },
+
+    // changeUser: (user, userId, callback) => {
+    //     database.change(user, userId, (err, data) => {
+    //         if (err) {
+    //             callback(err, null)
+    //         } else {
+    //             callback(null, {
+    //                 message: `User changed with id ${userId}.`,
+    //                 data: data
+    //             })
+    //         }
+    //     })
+    // }
 }
 
 module.exports = mealService
