@@ -40,6 +40,41 @@ const database = {
         }
     ],
 
+    _mealData: [
+        {
+            id: 0,
+            name: 'Spaghetti Bolognese',
+            description: 'De pastaklassieker bij uitstek.',
+            isActive: true,
+            isVega: false,
+            isVegan: false,
+            isToTakeHome: true,
+            dateTime: '2023-04-06',
+            maxAmountOfParticipants: 6,
+            price: 6.75,
+            imageUrl: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg',
+            allergenes: ['gluten', 'noten', 'lactose']
+            // cook: this._data[0],
+            // participants: this._data[1]
+        },
+        {
+            id: 1,
+            name: 'Sushi',
+            description: 'De echte sushi',
+            isActive: false,
+            isVega: false,
+            isVegan: false,
+            isToTakeHome: true,
+            dateTime: '2024-01-02',
+            maxAmountOfParticipants: 4,
+            price: 10.25,
+            imageUrl: 'https://www.kokenmetmaarten.nl/wp-content/uploads/2023/04/hosomaki_sushi2.jpg',
+            allergenes: ['gluten', 'noten', 'lactose']
+            // cook: this._data[1],
+            // participants: this._data[0]
+        }
+    ],
+
     // Ieder nieuw item in db krijgt 'autoincrement' index.
     // Je moet die wel zelf toevoegen aan ieder nieuw item.
     _index: 2,
@@ -50,6 +85,14 @@ const database = {
         setTimeout(() => {
             // Roep de callback aan, en retourneer de data
             callback(null, this._data)
+        }, this._delayTime)
+    },
+
+    getAllMeals(callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            // Roep de callback aan, en retourneer de data
+            callback(null, this._mealData)
         }, this._delayTime)
     },
 
@@ -82,6 +125,26 @@ const database = {
                 item.id = this._index++
                 // Add item to the array
                 this._data.push(item)
+                // Call the callback at the end of the operation
+                // with the added item as argument, or null if an error occurred
+                callback(null, item)
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
+        }, this._delayTime)
+    },
+
+    addMeal(item, callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            try {
+            
+                // Proceed with your logic here
+                // Add an id and add the item to the database
+                item.id = this._index++
+                // Add item to the array
+                this._mealData.push(item)
                 // Call the callback at the end of the operation
                 // with the added item as argument, or null if an error occurred
                 callback(null, item)
