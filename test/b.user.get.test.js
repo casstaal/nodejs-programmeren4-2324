@@ -39,7 +39,7 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('Overzicht van alle users')
+                    .equals('Overview of all users')
                 chai
                     .expect(res.body)
                     .to.have.property('data')
@@ -64,7 +64,7 @@ describe('UC202 Opvragen van overzicht van users', () => {
             chai.expect(res.body).to.have.property('status').equals(200)
             chai.expect(res.body)
                 .to.have.property('message')
-                .equals('Er zijn geen gebruikers die aan uw zoekterm voldoen')
+                .equals('There are no users matching your search term')
             chai
                 .expect(res.body)
                 .to.have.property('data')
@@ -107,7 +107,7 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('Gefilterd op 1 parameter')
+                    .equals('Filtered on 1 parameter: isActive = false' )
                 chai
                     .expect(res.body)
                     .to.have.property('data')
@@ -151,7 +151,7 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('Gefilterd op 1 parameter')
+                    .equals('Filtered on 1 parameter: isActive = true')
                 chai
                     .expect(res.body)
                     .to.have.property('data')
@@ -195,11 +195,10 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('Gefilterd op 2 parameters')
+                    .equals('Filtered on 2 parameters: isActive = true and city = Breda')
                 chai
                     .expect(res.body)
                     .to.have.property('data')
-                    // .that.is.a('object')
                     .that.is.a('array')
 
                 done()

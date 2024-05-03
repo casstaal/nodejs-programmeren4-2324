@@ -3,7 +3,7 @@ var logger = require('tracer').console()
 
 const userService = {
     create: (user, callback) => {
-        logger.log('hello')
+        // logger.log('hello')
         database.add(user, (err, data) => {
             if (err) {
                 callback(err, null)

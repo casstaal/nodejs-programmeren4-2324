@@ -57,12 +57,12 @@ const database = {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
             try {
-                console.log('UserID: ' + userId)
+                // console.log('UserID: ' + userId)
                 assert.ok(
                     this.checkIfIDExists(userId),
                     'This ID does not exist'
                 )
-                console.log('userId: ' + userId)
+                // console.log('userId: ' + userId)
                 let arrayPosition = this.getArrayPositionOfUserID(userId)
 
                 callback(null, this._data[arrayPosition])
@@ -99,12 +99,12 @@ const database = {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
             try {
-                console.log('UserID: ' + userId)
+                // console.log('UserID: ' + userId)
                 assert.ok(
                     this.checkIfIDExists(userId),
                     'This ID does not exist'
                 )
-                console.log('userId: ' + userId)
+                // console.log('userId: ' + userId)
                 let arrayPosition = this.getArrayPositionOfUserID(userId)
 
                 this._data.splice(arrayPosition, 1)
@@ -122,12 +122,12 @@ const database = {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
             try {
-                console.log('UserID: ' + userId)
+                // console.log('UserID: ' + userId)
                 assert.ok(
                     this.checkIfIDExists(userId),
                     'This ID does not exist'
                 )
-                console.log('userId: ' + userId)
+                // console.log('userId: ' + userId)
                 let arrayPosition = this.getArrayPositionOfUserID(userId)
                 item.id = userId
 
@@ -160,8 +160,8 @@ const database = {
     checkIfEmailExists(emailAdress) {
         for (let i = 0; i < this._data.length; i++) {
             if (this._data[i].emailAdress === emailAdress) {
-                console.log('entered if loop in checkIfEmailExists')
-                console.log('userId in if loop: ' + this._data[i].id)
+                // console.log('entered if loop in checkIfEmailExists')
+                // console.log('userId in if loop: ' + this._data[i].id)
                 return true
             }
         }
@@ -169,17 +169,17 @@ const database = {
     },
 
     checkIfIDExists(parameterID) {
-        console.log('UserID in checkIfIDExists: ' + parameterID)
+        // console.log('UserID in checkIfIDExists: ' + parameterID)
         for (let i = 0; i < this._data.length; i++) {
-            console.log(
-                'arrayID: ' +
-                    this._data[i].id +
-                    ' and parameterID: ' +
-                    parameterID
-            )
-            console.log('typeof parameterID: ' + typeof parameterID)
+            // console.log(
+            //     'arrayID: ' +
+            //         this._data[i].id +
+            //         ' and parameterID: ' +
+            //         parameterID
+            // )
+            // console.log('typeof parameterID: ' + typeof parameterID)
             if (this._data[i].id === parameterID) {
-                console.log('entered if loop in checkIfIDExists')
+                // console.log('entered if loop in checkIfIDExists')
                 return true
             }
         }
