@@ -252,6 +252,33 @@ const database = {
         }, this._delayTime)
     },
 
+    changeMeal(item, mealId, callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            try {
+                assert.ok(
+                    this.checkIfMealIDExists(mealId),
+                    'This ID does not exist'
+                )
+                let arrayPosition = this.getArrayPositionOfMealID(mealId)
+                item.id = mealId
+
+                this._mealData[arrayPosition] = item
+
+                // Roep de callback aan het einde van de operatie
+                // met het toegevoegde item als argument, of null als er een fout is opgetreden
+                callback(null, item)
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
+
+            // Roep de callback aan het einde van de operatie
+            // met het toegevoegde item als argument, of null als er een fout is opgetreden
+            // callback(null, item)
+        }, this._delayTime)
+    },
+
     checkIfEmailExists(emailAdress) {
         for (let i = 0; i < this._data.length; i++) {
             if (this._data[i].emailAdress === emailAdress) {

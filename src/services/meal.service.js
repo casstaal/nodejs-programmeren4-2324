@@ -55,18 +55,18 @@ const mealService = {
         })
     },
 
-    // changeUser: (user, userId, callback) => {
-    //     database.change(user, userId, (err, data) => {
-    //         if (err) {
-    //             callback(err, null)
-    //         } else {
-    //             callback(null, {
-    //                 message: `User changed with id ${userId}.`,
-    //                 data: data
-    //             })
-    //         }
-    //     })
-    // }
+    changeMeal: (meal, mealId, callback) => {
+        database.changeMeal(meal, mealId, (err, data) => {
+            if (err) {
+                callback(err, null)
+            } else {
+                callback(null, {
+                    message: `Meal changed with id ${mealId}.`,
+                    data: data
+                })
+            }
+        })
+    }
 }
 
 module.exports = mealService
