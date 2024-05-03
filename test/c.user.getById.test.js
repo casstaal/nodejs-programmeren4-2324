@@ -7,7 +7,6 @@ chai.should()
 chai.use(chaiHttp)
 tracer.setLevel('warn')
 
-// const endpointToTest = '/api/users/:1'
 
 describe('UC204 Opvragen van usergegevens bij ID', () => {
     /**
@@ -55,28 +54,6 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
             .get('/api/users/:0')
             
             .end((err, res) => {
-                // res.should.have.status(200)
-                // res.body.should.be.a('object')
-
-                // res.body.should.have.property('data').that.is.a('object')
-                // res.body.should.have.property('message').that.is.a('string')
-
-                // const data = res.body.data
-                // data.should.have.property('firstName').equals('Marieke')
-                // data.should.have.property('lastName').equals('Jansen')
-                // data.should.have.property('emailAdress').equals('m@server.nl')
-                // data.should.have.property('isActive').that.is.a('boolean')
-                // data.should.have.property('password').equals('secret')
-                // data.should.have.property('phoneNumber').equals('+06 123456789')
-                // data.should.have.property('roles').equals('serer')
-                // data.should.have.property('street').equals('Hogeschoollaan')
-                // data.should.have.property('city').equals('Breda')
-                // data.should.have.property('postalCode').equals('3928 KN')
-
-                // data.should.have.property('id').that.is.a('number')
-
-                // done()
-
                 chai.expect(res).to.have.status(200)
                 chai.expect(res).not.to.have.status(400)
                 chai.expect(res.body).to.be.a('object')
@@ -88,8 +65,7 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
                     .expect(res.body)
                     .to.have.property('data')
                     .that.is.a('object')
-                    // .that.is.a('array')
-
+                    
                 done()
             })
     })

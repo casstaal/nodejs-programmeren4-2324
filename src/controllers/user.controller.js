@@ -27,13 +27,6 @@ let userController = {
 
     getAll: (req, res, next) => {
         const queryField = Object.entries(req.query)
-        // console.log('Queryfield: ' + queryField)
-        // console.log(`Dit is field 1 ${queryField[0][0]} = ${queryField[0][1]}`)
-
-        // const queryField1 = queryField[0][0]
-        // const queryValue1 = queryField[0][1]
-        // const queryField2 = queryField[1][0]
-        // const queryValue2 = queryField[1][1]
 
         userService.getAll((error, success) => {
             if (error) {
@@ -52,13 +45,6 @@ let userController = {
                     const queryField2 = queryField[1][0]
                     let queryValue2 = queryField[1][1]
 
-                    // if (!queryField1 || !queryValue1 || queryField2 || queryValue2) {
-                    //     return res.status(400).json({
-                    //         status: 400,
-                    //         message: 'Both field and value query parameters are required for filtering.',
-                    //         data: {}
-                    //     });
-                    // }
                     let myBool
                     if(queryField1 === 'isActive' && (queryValue1 === 'true' || queryValue1 === 'false')) {
                         myBool = (queryValue1 === 'true')
@@ -106,16 +92,6 @@ let userController = {
                         queryValueLength1 = myBool1
                     }
                     
-                    // if (!queryField1 || !queryValue1) {
-                    //     return res.status(400).json({
-                    //         status: 400,
-                    //         message: 'Both field and value query parameters are required for filtering.',
-                    //         data: {}
-                    //     });
-                    // }
-
-                    // let myBool = (queryField[0][1] === 'true')
-                    // let parameter = queryField[0][0]
                     const filteredData = success.data.filter(item => item[queryFieldLength1] === queryValueLength1)
 
                     if(filteredData.length === 0) {
@@ -146,22 +122,14 @@ let userController = {
                         data: {}
                     })
                 }
-
-                // res.status(200).json({
-                //     status: 200,
-                //     message: success.message,
-                //     data: success.data
-                // })
             }
         })
     },
 
     getById: (req, res, next) => {
-        const userId = req.params.userId
-        const myUserId = userId[1]
-        // console.log('userid:' + userId)
+        let userId = req.params.userId
+        let myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
-        // console.log('correct userid: ' + numberUserId)
 
         userService.getById(numberUserId, (error, success) => {
             if (error) {
@@ -183,11 +151,9 @@ let userController = {
 
     // Todo: Implement the update and delete methods
     deleteUser: (req, res, next) => {
-        const userId = req.params.userId
-        const myUserId = userId[1]
-
+        let userId = req.params.userId
+        let myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
-        // console.log('correct userid: ' + numberUserId)
 
         userService.deleteUser(numberUserId, (error, success) => {
             if (error) {
@@ -210,10 +176,7 @@ let userController = {
     changeUser: (req, res, next) => {
         const userId = req.params.userId
         const myUserId = userId[1]
-
         const numberUserId = parseInt(myUserId)
-        // console.log('correct userid: ' + numberUserId)
-
         const user = req.body
 
         userService.changeUser(user, numberUserId, (error, success) => {

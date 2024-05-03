@@ -7,8 +7,6 @@ chai.should()
 chai.use(chaiHttp)
 tracer.setLevel('warn')
 
-// const endpointToTest = '/api/users'
-
 describe('UC206 Verwijderen van user', () => {
     /**
      * Voorbeeld van een beforeEach functie.
@@ -60,10 +58,6 @@ describe('UC206 Verwijderen van user', () => {
                 /**
                  * Voorbeeld uitwerking met chai.expect
                  */
-                // chai.expect(res).to.have.status(200)
-                // chai.expect(res).not.to.have.status(500)
-                // chai.expect(res.body).to.be.a('object')
-                // chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
                     .equals('User deleted with id 1.')

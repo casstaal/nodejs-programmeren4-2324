@@ -52,10 +52,7 @@ const validateUser = (req, res, next) => {
         next()
     } catch (err) {
         console.log(err)
-        // res.status(400).json({
-        //     status: 400,
-        //     message: err.message
-        // })
+        
         return next({
             // error wordt doorgestuurd naar de error handler in index.js
             status: 400,

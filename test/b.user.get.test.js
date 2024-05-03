@@ -30,8 +30,6 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 /**
                  * Voorbeeld uitwerking met chai.expect
                  */
-                // res.should.have.status(200)
-                // res.body.should.be.a('object')
 
                 chai.expect(res).to.have.status(200)
                 chai.expect(res).not.to.have.status(400)
@@ -43,7 +41,6 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 chai
                     .expect(res.body)
                     .to.have.property('data')
-                    // .that.is.a('object')
                     .that.is.a('array')
 
                 done()
@@ -79,28 +76,6 @@ describe('UC202 Opvragen van overzicht van users', () => {
             .get('/api/user?isActive=false')
             
             .end((err, res) => {
-                // res.should.have.status(200)
-                // res.body.should.be.a('object')
-
-                // res.body.should.have.property('data').that.is.a('array')
-                // res.body.should.have.property('message').that.is.a('string')
-
-                // const data = res.body.data
-                // data.should.have.property('firstName').equals('Marieke')
-                // data.should.have.property('lastName').equals('Jansen')
-                // data.should.have.property('emailAdress').equals('m@server.nl')
-                // data.should.have.property('isActive').that.is.a('boolean')
-                // data.should.have.property('password').equals('secret')
-                // data.should.have.property('phoneNumber').equals('+06 123456789')
-                // data.should.have.property('roles').equals('server')
-                // data.should.have.property('street').equals('Hogeschoollaan')
-                // data.should.have.property('city').equals('Breda')
-                // data.should.have.property('postalCode').equals('3928 KN')
-
-                // data.should.have.property('id').that.is.a('number')
-
-                // done()
-
                 chai.expect(res).to.have.status(200)
                 chai.expect(res).not.to.have.status(400)
                 chai.expect(res.body).to.be.a('object')
@@ -111,7 +86,6 @@ describe('UC202 Opvragen van overzicht van users', () => {
                 chai
                     .expect(res.body)
                     .to.have.property('data')
-                    // .that.is.a('object')
                     .that.is.a('array')
 
                 done()
@@ -123,28 +97,6 @@ describe('UC202 Opvragen van overzicht van users', () => {
             .get('/api/user?isActive=true')
             
             .end((err, res) => {
-                // res.should.have.status(200)
-                // res.body.should.be.a('object')
-
-                // res.body.should.have.property('data').that.is.a('array')
-                // res.body.should.have.property('message').that.is.a('string')
-
-                // const data = res.body.data
-                // data.should.have.property('firstName').equals('Hendrik')
-                // data.should.have.property('lastName').equals('van Dam')
-                // data.should.have.property('emailAdress').equals('hvd@server.nl')
-                // data.should.have.property('isActive').that.is.a('boolean')
-                // data.should.have.property('password').equals('testPassword')
-                // data.should.have.property('phoneNumber').equals('+06 123456789')
-                // data.should.have.property('roles').equals('chef')
-                // data.should.have.property('street').equals('Hogeschoollaan')
-                // data.should.have.property('city').equals('Breda')
-                // data.should.have.property('postalCode').equals('3876 UK')
-
-                // data.should.have.property('id').that.is.a('number')
-
-                // done()
-
                 chai.expect(res).to.have.status(200)
                 chai.expect(res).not.to.have.status(400)
                 chai.expect(res.body).to.be.a('object')
@@ -167,28 +119,6 @@ describe('UC202 Opvragen van overzicht van users', () => {
             .get('/api/user?isActive=true&city=Breda')
             
             .end((err, res) => {
-                // res.should.have.status(200)
-                // res.body.should.be.a('object')
-
-                // res.body.should.have.property('data').that.is.a('array')
-                // res.body.should.have.property('message').that.is.a('string')
-
-                // const data = res.body.data
-                // data.should.have.property('firstName').equals('Hendrik')
-                // data.should.have.property('lastName').equals('van Dam')
-                // data.should.have.property('emailAdress').equals('hvd@server.nl')
-                // data.should.have.property('isActive').that.is.a('boolean')
-                // data.should.have.property('password').equals('testPassword')
-                // data.should.have.property('phoneNumber').equals('+06 123456789')
-                // data.should.have.property('roles').equals('chef')
-                // data.should.have.property('street').equals('Hogeschoollaan')
-                // data.should.have.property('city').equals('Breda')
-                // data.should.have.property('postalCode').equals('3876 UK')
-
-                // data.should.have.property('id').that.is.a('number')
-
-                // done()
-
                 chai.expect(res).to.have.status(200)
                 chai.expect(res).not.to.have.status(400)
                 chai.expect(res.body).to.be.a('object')
