@@ -50,7 +50,7 @@ const database = {
             isVegan: false,
             isToTakeHome: true,
             dateTime: '2023-04-06',
-            maxAmountOfParticipants: 6,
+            maxAmountOfParticipants: 2,
             price: 6.75,
             imageUrl: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg',
             allergenes: ['gluten', 'noten', 'lactose'],
@@ -220,6 +220,15 @@ const database = {
     // Simuleer een asynchrone operatie
     setTimeout(() => {
         try {
+            assert.ok(
+                this.checkIfMealIDExists(mealId),
+                'This meal ID does not exist'
+            )
+
+            assert.ok(
+                this.checkPlaceForRegistration(mealId),
+                'The maximum amount of registrations for this meal has already been reached. Could not persist registration.'
+            )
 
             // Add item to the array
             this._mealData[mealId].participants.push('Cas')
@@ -417,6 +426,16 @@ const database = {
         }
 
         return arrayPosition
+    },
+
+    checkPlaceForRegistration(mealId) {
+        const places = this._mealData[mealId].maxAmountOfParticipants
+        const filledPlaces = this._mealData[mealId].participants.length
+
+        console.log('Possible places: ' + places)
+        console.log('Filled places: ' + filledPlaces)
+
+        return places > filledPlaces
     },
 
     checkPassword(password) {
