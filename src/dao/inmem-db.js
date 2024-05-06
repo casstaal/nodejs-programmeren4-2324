@@ -53,9 +53,9 @@ const database = {
             maxAmountOfParticipants: 6,
             price: 6.75,
             imageUrl: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg',
-            allergenes: ['gluten', 'noten', 'lactose']
+            allergenes: ['gluten', 'noten', 'lactose'],
             // cook: this._data[0],
-            // participants: this._data[1]
+            participants: ['Henk', 'Peter']
         },
         {
             id: 1,
@@ -69,9 +69,9 @@ const database = {
             maxAmountOfParticipants: 4,
             price: 10.25,
             imageUrl: 'https://www.kokenmetmaarten.nl/wp-content/uploads/2023/04/hosomaki_sushi2.jpg',
-            allergenes: ['gluten', 'noten', 'lactose']
+            allergenes: ['gluten', 'noten', 'lactose'],
             // cook: this._data[1],
-            // participants: this._data[0]
+            participants: ['Piet', 'Jan']
         }
     ],
 
@@ -171,6 +171,23 @@ const database = {
                 callback(error)
             }
         }, this._delayTime)
+    },
+
+    addRegistration(mealId, callback) {
+    // Simuleer een asynchrone operatie
+    setTimeout(() => {
+        try {
+
+            // Add item to the array
+            this._mealData[mealId].participants.push('Cas')
+            // Call the callback at the end of the operation
+            // with the added item as argument, or null if an error occurred
+            callback(null, mealId)
+        } catch (error) {
+            console.error(error)
+            callback(error)
+        }
+    }, this._delayTime)
     },
 
     // Voeg zelf de overige database functionaliteit toe
