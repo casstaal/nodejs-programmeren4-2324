@@ -13,6 +13,19 @@ const registrationService = {
                 })
             }
         })
+    },
+
+    deleteRegistration: (mealId, callback) => {
+        database.deleteRegistration(mealId, (err, data) => {
+            if (err) {
+                callback(err, null)
+            } else {
+                callback(null, {
+                    message: `User met ID 1 is afgemeld voor maaltijd met ID ${mealId}.`,
+                    data: data
+                })
+            }
+        })
     }
 }
 

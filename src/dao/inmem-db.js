@@ -55,7 +55,15 @@ const database = {
             imageUrl: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg',
             allergenes: ['gluten', 'noten', 'lactose'],
             // cook: this._data[0],
-            participants: ['Henk', 'Peter']
+            participants: [
+                {
+                    id: 0,
+                    name: 'Henk'
+                }, 
+                {
+                    id: 1,
+                    name: 'Peter'
+                }]
         },
         {
             id: 1,
@@ -71,7 +79,15 @@ const database = {
             imageUrl: 'https://www.kokenmetmaarten.nl/wp-content/uploads/2023/04/hosomaki_sushi2.jpg',
             allergenes: ['gluten', 'noten', 'lactose'],
             // cook: this._data[1],
-            participants: ['Piet', 'Jan']
+            participants: [
+            {
+                id: 0,
+                name: 'Jan'
+            }, 
+            {
+                id: 1,
+                name: 'Piet'
+            }]
         }
     ],
 
@@ -233,6 +249,25 @@ const database = {
         }, this._delayTime)
     },
 
+    deleteRegistration(mealId, callback) {
+    // Simuleer een asynchrone operatie
+    const userId = 1
+    setTimeout(() => {
+        try {
+        
+            let arrayPosition = this.getArrayPositionOfUserInMealRegistrations(userId)
+
+            this._mealData[mealId].participants.splice(arrayPosition, 1)
+            // Roep de callback aan het einde van de operatie
+            // met het toegevoegde item als argument, of null als er een fout is opgetreden
+            callback(null, {})
+        } catch (error) {
+            console.error(error)
+            callback(error)
+        }
+    }, this._delayTime)
+    },
+
     change(item, userId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
@@ -340,6 +375,19 @@ const database = {
                 arrayPosition = i
             }
         }
+        return arrayPosition
+    },
+
+    getArrayPositionOfUserInMealRegistrations(id) {
+        let arrayPosition = -1
+        for (let i = 0; i < this._mealData.length; i++) {
+            for (let j = 0; j < this._mealData[i].participants.length; j++) {
+                if (this._mealData[i].participants.id === id) {
+                    arrayPosition = j
+                }
+            }
+        }
+
         return arrayPosition
     },
 

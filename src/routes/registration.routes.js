@@ -5,7 +5,7 @@ const assert = require('assert')
 
 // Registration routes
 router.post('/api/meal/:mealId/participate', registrationController.createRegistration)
-router.delete('/api/ meal/:mealId/participate')
+router.delete('/api/meal/:mealId/participate', registrationController.deleteRegistration)
 router.get('/api/meal/:mealId/participants')
 router.get('/api/meal/:mealId/participants/:participantId')
 
