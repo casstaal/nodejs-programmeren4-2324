@@ -115,8 +115,19 @@ const database = {
     getAllParticipants(mealId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
-            // Roep de callback aan, en retourneer de data
-            callback(null, this._mealData[mealId].participants)
+            
+            try {
+                assert.ok(
+                    this.checkIfMealIDExists(mealId),
+                    'This meal does not exist'
+                )
+
+                // Roep de callback aan, en retourneer de data
+                callback(null, this._mealData[mealId].participants)
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
         }, this._delayTime)
     },
 
