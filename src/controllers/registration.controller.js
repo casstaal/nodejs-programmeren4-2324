@@ -75,6 +75,33 @@ let registrationController = {
                 })
             }
         })
+    },
+
+    getParticipantById: (req, res, next) => {
+        let mealId = req.params.mealId
+        let myMealId = mealId.substring(1)
+        const numberMealId = parseInt(myMealId)
+
+        let participantId = req.params.participantId
+        let myParticipantId = participantId.substring(1)
+        const numberParticipantId = parseInt(myParticipantId)
+
+        registrationService.getParticipantById(numberMealId, numberParticipantId, (error, success) => {
+            if (error) {
+                return next({
+                    status: error.status,
+                    message: error.message,
+                    data: {}
+                })
+            }
+            if (success) {
+                res.status(200).json({
+                    status: 200,
+                    message: success.message,
+                    data: success.data
+                })
+            }
+        })
     }
 }
 

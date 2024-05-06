@@ -156,6 +156,25 @@ const database = {
         }, this._delayTime)
     },
 
+    getMealParticipantById(mealId, participantId, callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            try {
+                assert.ok(
+                    this.checkIfMealIDExists(mealId),
+                    'This Meal ID does not exist'
+                )
+                let arrayPosition = this.getArrayPositionOfMealID(mealId)
+                let participantArrayPosition = this.getArrayPositionOfUserInMealRegistrations(participantId)
+
+                callback(null, this._mealData[arrayPosition].participants[participantArrayPosition])
+            } catch (error) {
+                console.error(error)
+                callback(error)
+            }
+        }, this._delayTime)
+    },
+
     add(item, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {
@@ -264,6 +283,7 @@ const database = {
         try {
         
             let arrayPosition = this.getArrayPositionOfUserInMealRegistrations(userId)
+            console.log('Delete array position: ' + arrayPosition)
 
             this._mealData[mealId].participants.splice(arrayPosition, 1)
             // Roep de callback aan het einde van de operatie
@@ -390,7 +410,7 @@ const database = {
         let arrayPosition = -1
         for (let i = 0; i < this._mealData.length; i++) {
             for (let j = 0; j < this._mealData[i].participants.length; j++) {
-                if (this._mealData[i].participants.id === id) {
+                if (this._mealData[i].participants[j].id === id) {
                     arrayPosition = j
                 }
             }

@@ -40,7 +40,20 @@ const registrationService = {
                 })
             }
         })
-    }
+    },
+
+    getParticipantById: (mealId, participantId, callback) => {
+        database.getMealParticipantById(mealId, participantId, (err, data) => {
+            if (err) {
+                callback(err, null)
+            } else {
+                callback(null, {
+                    message: `Found user with id ${participantId} for the meal with id ${mealId}`,
+                    data: data
+                })
+            }
+        })
+    },
 }
 
 module.exports = registrationService
