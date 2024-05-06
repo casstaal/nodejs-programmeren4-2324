@@ -112,6 +112,14 @@ const database = {
         }, this._delayTime)
     },
 
+    getAllParticipants(mealId, callback) {
+        // Simuleer een asynchrone operatie
+        setTimeout(() => {
+            // Roep de callback aan, en retourneer de data
+            callback(null, this._mealData[mealId].participants)
+        }, this._delayTime)
+    },
+
     getById(userId, callback) {
         // Simuleer een asynchrone operatie
         setTimeout(() => {

@@ -26,6 +26,20 @@ const registrationService = {
                 })
             }
         })
+    },
+
+    getAllParticipants: (mealId, callback) => {
+        database.getAllParticipants(mealId, (err, data) => {
+            if (err) {
+                callback(err, null)
+            } else {
+                console.log(data)
+                callback(null, {
+                    message: `Found ${data.length} participants.`,
+                    data: data
+                })
+            }
+        })
     }
 }
 
