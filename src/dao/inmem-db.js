@@ -168,7 +168,7 @@ const database = {
             try {
                 assert.ok(
                     this.checkIfMealIDExists(mealId),
-                    'This ID does not exist'
+                    'This meal does not exist'
                 )
                 let arrayPosition = this.getArrayPositionOfMealID(mealId)
 
@@ -299,7 +299,7 @@ const database = {
             try {
                 assert.ok(
                     this.checkIfMealIDExists(mealId),
-                    'This ID does not exist'
+                    'This meal does not exist'
                 )
                 let arrayPosition = this.getArrayPositionOfMealID(mealId)
 
@@ -386,7 +386,7 @@ const database = {
             try {
                 assert.ok(
                     this.checkIfMealIDExists(mealId),
-                    'This ID does not exist'
+                    'This meal does not exist'
                 )
                 let arrayPosition = this.getArrayPositionOfMealID(mealId)
                 item.id = mealId
