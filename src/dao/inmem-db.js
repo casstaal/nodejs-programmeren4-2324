@@ -58,11 +58,13 @@ const database = {
             participants: [
                 {
                     id: 0,
-                    name: 'Henk'
+                    name: 'Henk',
+                    password: 'secret'
                 }, 
                 {
                     id: 1,
-                    name: 'Peter'
+                    name: 'Peter',
+                    password: 'secret'
                 }]
         },
         {
@@ -82,11 +84,13 @@ const database = {
             participants: [
             {
                 id: 2,
-                name: 'Jan'
+                name: 'Jan',
+                password: 'secret'
             }, 
             {
                 id: 1,
-                name: 'Piet'
+                name: 'Piet',
+                password: 'secret'
             }]
         }
     ],
@@ -113,7 +117,7 @@ const database = {
     },
 
     getAllParticipants(mealId, callback) {
-        // Simuleer een asynchrone operatie
+        // Simuleer een asynchrone operatie 
         setTimeout(() => {
             
             try {
@@ -122,8 +126,17 @@ const database = {
                     'This meal does not exist'
                 )
 
+                //This users array is created to return only the data you want to show in this method from the callback
+                //In this method only the id and name are needed. The other details are returned in the method getMealParticipantById
+                // let userData = {id: this._mealData[mealId].participants.id, name: this._mealData[mealId].participants.name}
+                let users = []
+
+                for(let i = 0; i < this._mealData[mealId].participants.length; i++) {
+                    users.push({id: this._mealData[mealId].participants[i].id, name: this._mealData[mealId].participants[i].name})
+                }
+
                 // Roep de callback aan, en retourneer de data
-                callback(null, this._mealData[mealId].participants)
+                callback(null, users)
             } catch (error) {
                 console.error(error)
                 callback(error)
@@ -175,8 +188,13 @@ const database = {
                     this.checkIfMealIDExists(mealId),
                     'This Meal ID does not exist'
                 )
+                assert.ok(
+                    this.checkIfIDExists(participantId),
+                    'This user does not exist'
+                )
                 let arrayPosition = this.getArrayPositionOfMealID(mealId)
                 let participantArrayPosition = this.getArrayPositionOfUserInMealRegistrations(participantId)
+                delete this._mealData[arrayPosition].participants[participantArrayPosition].password
 
                 callback(null, this._mealData[arrayPosition].participants[participantArrayPosition])
             } catch (error) {
