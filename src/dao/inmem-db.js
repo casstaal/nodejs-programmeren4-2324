@@ -50,7 +50,7 @@ const database = {
             isVegan: false,
             isToTakeHome: true,
             dateTime: '2023-04-06',
-            maxAmountOfParticipants: 2,
+            maxAmountOfParticipants: 6,
             price: 6.75,
             imageUrl: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg',
             allergenes: ['gluten', 'noten', 'lactose'],
@@ -81,7 +81,7 @@ const database = {
             // cook: this._data[1],
             participants: [
             {
-                id: 0,
+                id: 2,
                 name: 'Jan'
             }, 
             {
@@ -206,7 +206,7 @@ const database = {
                 item.id = this._index++
                 // Add item to the array
                 this._mealData.push(item)
-                // Call the callback at the end of the operation
+                // Call the callback at th e end of the operation
                 // with the added item as argument, or null if an error occurred
                 callback(null, item)
             } catch (error) {
@@ -214,7 +214,7 @@ const database = {
                 callback(error)
             }
         }, this._delayTime)
-    },
+    }, 
 
     addRegistration(mealId, callback) {
     // Simuleer een asynchrone operatie
@@ -290,6 +290,16 @@ const database = {
     const userId = 1
     setTimeout(() => {
         try {
+
+            assert.ok(
+                this.checkIfMealIDExists(mealId),
+                'This meal does not exist'
+            )
+            assert.ok(
+                this.checkIfRegistrationExists(mealId, userId),
+                'This registration does not exist'
+            )
+
         
             let arrayPosition = this.getArrayPositionOfUserInMealRegistrations(userId)
             console.log('Delete array position: ' + arrayPosition)
@@ -436,6 +446,15 @@ const database = {
         console.log('Filled places: ' + filledPlaces)
 
         return places > filledPlaces
+    },
+
+    checkIfRegistrationExists(mealId, userId) {
+        for(let i = 0; i < this._mealData[mealId].participants.length; i++) {
+            if (this._mealData[mealId].participants[i].id === userId) {
+                return true
+            }
+        }
+        return false
     },
 
     checkPassword(password) {
