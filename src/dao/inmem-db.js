@@ -213,6 +213,7 @@ const database = {
                 // Proceed with your logic here
                 // Add an id and add the item to the database
                 item.id = this._index++
+                item.isActive = true
                 // Add item to the array
                 this._data.push(item)
                 // Call the callback at the end of the operation

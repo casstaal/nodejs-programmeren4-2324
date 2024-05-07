@@ -30,10 +30,10 @@ const validateUser = (req, res, next) => {
             typeof emailAdress === 'string',
             'Email address is missing or is not a string'
         )
-        assert(
-            typeof isActive === 'boolean',
-            'isActive is missing or is not a boolean'
-        )
+        // assert(
+        //     typeof isActive === 'boolean',
+        //     'isActive is missing or is not a boolean'
+        // )
         assert(
             typeof password === 'string',
             'Password is missing or is not a string'
