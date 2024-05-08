@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/user.controller')
 const assert = require('assert')
+const validateToken = require('./authentication.routes').validateToken
 
 const validateUser = (req, res, next) => {
     let user = req.body
@@ -68,5 +69,6 @@ router.get('/api/user', userController.getAll)
 router.get('/api/users/:userId', userController.getById)
 router.delete('/api/users/:userId', userController.deleteUser)
 router.put('/api/users/:userId', validateUser ,userController.changeUser)
+// get user profile aanmaken
 
 module.exports = router
