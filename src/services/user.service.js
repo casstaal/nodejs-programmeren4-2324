@@ -73,15 +73,40 @@ const userService = {
     },
 
     deleteUser: (userId, callback) => {
-        database.delete(userId, (err, data) => {
+        // database.delete(userId, (err, data) => {
+        //     if (err) {
+        //         callback(err, null)
+        //     } else {
+        //         callback(null, {
+        //             message: `User deleted with id ${userId}.`,
+        //             data: data
+        //         })
+        //     }
+        // })
+        db.getConnection(function (err, connection) {
             if (err) {
+                logger.error(err)
                 callback(err, null)
-            } else {
-                callback(null, {
-                    message: `User deleted with id ${userId}.`,
-                    data: data
-                })
+                return
             }
+
+            connection.query(
+                'DELETE FROM `user` WHERE id = ?', [userId],
+                function (error, results, fields) {
+                    connection.release()
+
+                    if (error) {
+                        logger.error(error)
+                        callback(error, null)
+                    } else {
+                        logger.debug(results)
+                        callback(null, {
+                            message: `Deleted user with id ${userId} .`,
+                            data: results
+                        })
+                    }
+                }
+            )
         })
     },
 
