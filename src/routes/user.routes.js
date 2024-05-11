@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/user.controller')
 const assert = require('assert')
+const validateToken = require('./authentication.routes').validateToken
 
 const validateUser = (req, res, next) => {
     let user = req.body
@@ -30,10 +31,10 @@ const validateUser = (req, res, next) => {
             typeof emailAdress === 'string',
             'Email address is missing or is not a string'
         )
-        assert(
-            typeof isActive === 'boolean',
-            'isActive is missing or is not a boolean'
-        )
+        // assert(
+        //     typeof isActive === 'boolean',
+        //     'isActive is missing or is not a boolean'
+        // )
         assert(
             typeof password === 'string',
             'Password is missing or is not a string'
