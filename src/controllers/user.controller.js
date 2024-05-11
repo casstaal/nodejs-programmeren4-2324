@@ -175,7 +175,7 @@ let userController = {
 
     changeUser: (req, res, next) => {
         const userId = req.params.userId
-        const myUserId = userId[1]
+        const myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
         const user = req.body
 
