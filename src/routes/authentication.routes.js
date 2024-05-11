@@ -77,8 +77,8 @@ function validateToken(req, res, next) {
     }
 }
 
-router.post('/api/auth/login', validateLogin, authenticationController.login)
+router.post('/login', validateLogin, authenticationController.login)
 
-module.exports = router
+// module.exports = router
 
-// module.exports = { router, validateToken }
+module.exports = { router, validateToken }
