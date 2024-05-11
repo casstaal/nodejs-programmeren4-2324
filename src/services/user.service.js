@@ -23,8 +23,11 @@ const userService = {
         const roles = user.roles
         const street = user.street
         const city = user.city
+
+        database.checkUserData(user, false)
         
         db.getConnection(function (err, connection) {
+
             if (err) {
                 logger.error(err)
                 callback(err, null)
@@ -75,7 +78,8 @@ const userService = {
             }
 
             connection.query(
-                'SELECT id, firstName, lastName FROM `user`',
+                'SELECT * FROM `user`',
+                // 'SELECT id, firstName, lastName FROM `user`',
                 function (error, results, fields) {
                     connection.release()
 
@@ -114,19 +118,40 @@ const userService = {
             }
 
             connection.query(
-                'SELECT * FROM `user` WHERE id = ?', [userId],
+                'SELECT COUNT(*) AS count FROM `user` WHERE id = ?', [userId],
                 function (error, results, fields) {
                     connection.release()
 
                     if (error) {
                         logger.error(error)
                         callback(error, null)
+                    } 
+                    
+                    //If the count is greater than 0, than the ID exists
+                    if(results[0].count > 0){
+                        connection.query(
+                            'SELECT * FROM `user` WHERE id = ?', [userId],
+                            function (error, results, fields) {
+                                connection.release()
+            
+                                if (error) {
+                                    logger.error(error)
+                                    callback(error, null)
+                                } else {
+                                    logger.debug(results)
+                                    callback(null, {
+                                        message: `Found user with id ${userId} .`,
+                                        data: results
+                                    })
+                                }
+                            }
+                        )
                     } else {
                         logger.debug(results)
                         callback(null, {
-                            message: `Found user with id ${userId} .`,
-                            data: results
-                        })
+                            message: `The ID: ${userId} does not exist`,
+                            data: {}
+                         })
                     }
                 }
             )
@@ -152,19 +177,40 @@ const userService = {
             }
 
             connection.query(
-                'DELETE FROM `user` WHERE id = ?', [userId],
+                'SELECT COUNT(*) AS count FROM `user` WHERE id = ?', [userId],
                 function (error, results, fields) {
                     connection.release()
 
                     if (error) {
                         logger.error(error)
                         callback(error, null)
+                    } 
+                    
+                    //If the count is greater than 0, than the ID exists
+                    if(results[0].count > 0){
+                        connection.query(
+                            'DELETE FROM `user` WHERE id = ?', [userId],
+                            function (error, results, fields) {
+                                connection.release()
+            
+                                if (error) {
+                                    logger.error(error)
+                                    callback(error, null)
+                                } else {
+                                    logger.debug(results)
+                                    callback(null, {
+                                        message: `Deleted user with id ${userId} .`,
+                                        data: results
+                                    })
+                                }
+                            }
+                        )
                     } else {
                         logger.debug(results)
                         callback(null, {
-                            message: `Deleted user with id ${userId} .`,
-                            data: results
-                        })
+                            message: `The ID: ${userId} does not exist`,
+                            data: {}
+                         })
                     }
                 }
             )
@@ -192,7 +238,17 @@ const userService = {
         const roles = user.roles
         const street = user.street
         const city = user.city
+
+        // const oldEmail = this.getEmailById(userId, (error, succes))
+        // const newEmail = emailAdress
+
+        // if(oldEmail === newEmail) {
+        //     this.checkUserData(user, true)
+        // } else {
+        //     this.checkUserData(user, false)
+        // }
         
+
         db.getConnection(function (err, connection) {
             if (err) {
                 logger.error(err)
@@ -200,26 +256,85 @@ const userService = {
                 return
             }
 
-
             connection.query(
-                'UPDATE `user` SET firstName = ?, lastName = ?, isActive = ?, emailAdress = ?, password = ?, phoneNumber = ?, roles = ?, street = ?, city = ? WHERE id = ?', [firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city, userId],
+                'SELECT COUNT(*) AS count FROM `user` WHERE id = ?', [userId],
                 function (error, results, fields) {
                     connection.release()
 
                     if (error) {
                         logger.error(error)
                         callback(error, null)
+                    } 
+                    
+                    //If the count is greater than 0, than the ID exists
+                    if(results[0].count > 0){
+                        // this.getEmailById(userId, function(error, oldEmail) {
+                        //     if (error) {
+                        //         console.error('Error: ' + error)
+                        //         return
+                        //     }
+
+                        //     const newEmail = emailAdress
+
+                        //     if(oldEmail === newEmail) {
+                        //         this.checkUserData(user, true)
+                        //     } else {
+                        //         this.checkUserData(user, false)
+                        //     }
+                        // })
+                        
+                        connection.query(
+                            'UPDATE `user` SET firstName = ?, lastName = ?, isActive = ?, emailAdress = ?, password = ?, phoneNumber = ?, roles = ?, street = ?, city = ? WHERE id = ?', [firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city, userId],
+                            function (error, results, fields) {
+                                connection.release()
+            
+                                if (error) {
+                                    logger.error(error)
+                                    callback(error, null)
+                                } else {
+                                    logger.debug(results)
+                                    callback(null, {
+                                        message: `Updated user with ID: ${userId}`,
+                                        data: results
+                                    })
+                                }
+                            }
+                        )
                     } else {
                         logger.debug(results)
                         callback(null, {
-                            message: `Updated user with ID: ${userId}`,
-                            data: results
-                        })
+                            message: `The ID: ${userId} does not exist`,
+                            data: {}
+                         })
                     }
                 }
             )
         })
-    }
+    },
+
+    // getEmailById(userId, callback) {
+    //     db.getConnection(function (err, connection) {
+    //         if (err) {
+    //             callback(err, null);
+    //             return;
+    //         }
+    
+    //         connection.query(
+    //             'SELECT emailAdress FROM `user` WHERE id = ?',
+    //             [userId],
+    //             function (error, results, fields) {
+    //                 connection.release();
+    
+    //                 if (error) {
+    //                     callback(error, null);
+    //                 } else {
+    //                     // Assuming there is exactly one row for the given user ID
+    //                     callback(null, results[0].emailAdress);
+    //                 }
+    //             }
+    //         )
+    //     })
+    // }
 }
 
 module.exports = userService
