@@ -1,5 +1,6 @@
 const mealService = require('../services/meal.service')
 const assert = require('assert')
+const logger = require('../util/logger')
 
 let mealController = {
     create: (req, res, next) => {
