@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - avans-programmeren-4
+name: Build and deploy Node.js app to Azure Web App - Share-A-Meal-Programmeren-4
 
 on:
     push:
@@ -118,6 +118,6 @@ jobs:
               id: deploy-to-webapp
               uses: azure/webapps-deploy@v3
               with:
-                  app-name: 'avans-programmeren-4'
+                  app-name: 'Share-A-Meal-Programmeren-4'
                   slot-name: 'Production'
                   package: .
