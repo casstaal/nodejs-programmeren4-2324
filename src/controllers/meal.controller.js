@@ -76,6 +76,8 @@ let mealController = {
         let myMealId = mealId.substring(1)
         const numberMealId = parseInt(myMealId)
 
+        const tokenUserId = req.userId
+
         mealService.deleteMeal(numberMealId, (error, success) => {
             if (error) {
                 return next({
@@ -94,29 +96,29 @@ let mealController = {
         })
     },
 
-    changeMeal: (req, res, next) => {
-        const mealId = req.params.mealId
-        const myMealId = mealId[1]
-        const numberMealId = parseInt(myMealId)
-        const meal = req.body
+    // changeMeal: (req, res, next) => {
+    //     const mealId = req.params.mealId
+    //     const myMealId = mealId[1]
+    //     const numberMealId = parseInt(myMealId)
+    //     const meal = req.body
 
-        mealService.changeMeal(meal, numberMealId, (error, success) => {
-            if (error) {
-                return next({
-                    status: error.status,
-                    message: error.message,
-                    data: {}
-                })
-            }
-            if (success) {
-                res.status(200).json({
-                    status: success.status,
-                    message: success.message,
-                    data: success.data
-                })
-            }
-        })
-    }
+    //     mealService.changeMeal(meal, numberMealId, (error, success) => {
+    //         if (error) {
+    //             return next({
+    //                 status: error.status,
+    //                 message: error.message,
+    //                 data: {}
+    //             })
+    //         }
+    //         if (success) {
+    //             res.status(200).json({
+    //                 status: success.status,
+    //                 message: success.message,
+    //                 data: success.data
+    //             })
+    //         }
+    //     })
+    // }
 }
 
 module.exports = mealController
