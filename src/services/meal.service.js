@@ -3,7 +3,7 @@ const db = require('../dao/mysql-db')
 var logger = require('tracer').console()
 
 const mealService = {
-    create: (meal, callback) => {
+    create: (meal, cookId, callback) => {
         // database.addMeal(meal, (err, data) => {
         //     if (err) {
         //         callback(err, null)
@@ -14,6 +14,48 @@ const mealService = {
         //         })
         //     }
         // })
+        const isActive = meal.isActive
+        const isVega = meal.isVega
+        const isVegan = meal.isVegan
+        const isToTakeHome = meal.isToTakeHome
+        const dateTime = meal.dateTime
+        const maxAmountOfParticipants = meal.maxAmountOfParticipants
+        const price = meal.price
+        const imageUrl = meal.imageUrl
+        const cookID = cookId
+        const name = meal.name
+        const description = meal.description
+        // const allergenes = meal.allergenes
+
+        // database.checkUserData(user, false)
+        
+        db.getConnection(function (err, connection) {
+
+            if (err) {
+                logger.error(err)
+                callback(err, null)
+                return
+            }
+
+
+            connection.query(
+                'INSERT INTO `meal` (isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookID, name, description],
+                function (error, results, fields) {
+                    connection.release()
+
+                    if (error) {
+                        logger.error(error)
+                        callback(error, null)
+                    } else {
+                        logger.debug(results)
+                        callback(null, {
+                            message: `Added new meal: ${name}`,
+                            data: results
+                        })
+                    }
+                }
+            )
+        })
     },
 
     getAll: (callback) => {

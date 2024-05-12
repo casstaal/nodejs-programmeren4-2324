@@ -5,10 +5,11 @@ const logger = require('../util/logger')
 let mealController = {
     create: (req, res, next) => {
         const meal = req.body
+        const userId = req.userId
         //
         // Todo: Validate user input
         //
-        mealService.create(meal, (error, success) => {
+        mealService.create(meal, userId, (error, success) => {
             if (error) {
                 return next({
                     status: error.status,
