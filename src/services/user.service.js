@@ -48,6 +48,7 @@ const userService = {
                     } else {
                         logger.debug(results)
                         callback(null, {
+                            status: 200,
                             message: `Added new user: ${firstName + " " + lastName}`,
                             data: results
                         })
