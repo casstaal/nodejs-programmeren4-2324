@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mealController = require('../controllers/meal.controller')
 const assert = require('assert')
+const validateToken = require('./authentication.routes').validateToken
 
 const validateMeal = (req, res, next) => {
     let meal = req.body
@@ -68,10 +69,10 @@ const validateMeal = (req, res, next) => {
 }
 
 // Meal routes
-router.post('/api/meal', validateMeal ,mealController.create)
-router.put('/api/meal/:mealId', validateMeal ,mealController.changeMeal)
+router.post('/api/meal', validateToken ,mealController.create)
+// router.put('/api/meal/:mealId', validateMeal ,mealController.changeMeal)
 router.get('/api/meal', mealController.getAll)
 router.get('/api/meal/:mealId', mealController.getById)
-router.delete('/api/meal/:mealId', mealController.deleteMeal)
+router.delete('/api/meal/:mealId', validateToken, mealController.deleteMeal)
 
 module.exports = router

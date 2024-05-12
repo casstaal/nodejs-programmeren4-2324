@@ -1,5 +1,7 @@
 const userService = require('../services/user.service')
 const assert = require('assert')
+const logger = require('../util/logger')
+
 
 let userController = {
     create: (req, res, next) => {
@@ -174,8 +176,8 @@ let userController = {
     },
 
     changeUser: (req, res, next) => {
-        let userId = req.params.userId
-        let myUserId = userId.substring(1)
+        const userId = req.params.userId
+        const myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
         const user = req.body
 
@@ -190,6 +192,27 @@ let userController = {
             if (success) {
                 res.status(200).json({
                     status: success.status,
+                    message: success.message,
+                    data: success.data
+                })
+            }
+        })
+    },
+
+    getProfile: (req, res, next) => {
+        const userId = req.userId
+        logger.trace('getProfile for userId', userId)
+        userService.getProfile(userId, (error, success) => {
+            if (error) {
+                return next({
+                    status: error.status,
+                    message: error.message,
+                    data: {}
+                })
+            }
+            if (success) {
+                res.status(200).json({
+                    status: 200,
                     message: success.message,
                     data: success.data
                 })

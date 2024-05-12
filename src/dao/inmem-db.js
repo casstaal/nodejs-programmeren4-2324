@@ -541,10 +541,10 @@ const database = {
             this.checkIfEmailIsValid(item.emailAdress),
             'The email address is not valid. An example of a valid email address is this: test@test.com'
         )
-        assert.ok(
-            this.validatePostalCode(item.postalCode),
-            'The postalcode is not valid. An example of a valid postalcode is: 1234 HG'
-        )
+        // assert.ok(
+        //     this.validatePostalCode(item.postalCode),
+        //     'The postalcode is not valid. An example of a valid postalcode is: 1234 HG'
+        // )
         assert.ok(
             this.validatePhoneNumber(item.phoneNumber),
             'The phone number is not valid. An example of a valid phone number is: +31672344624'

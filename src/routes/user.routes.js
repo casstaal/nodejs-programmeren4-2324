@@ -3,6 +3,7 @@ const router = express.Router()
 const userController = require('../controllers/user.controller')
 const assert = require('assert')
 const validateToken = require('./authentication.routes').validateToken
+const logger = require('../util/logger')
 
 const validateUser = (req, res, next) => {
     let user = req.body
@@ -10,13 +11,13 @@ const validateUser = (req, res, next) => {
         firstName,
         lastName,
         emailAdress,
-        isActive,
+        // isActive,
         password,
         phoneNumber,
         roles,
         street,
         city,
-        postalCode
+        // postalCode
     } = user
     try {
         assert(
@@ -49,7 +50,7 @@ const validateUser = (req, res, next) => {
             'Street is missing or is not a string'
         )
         assert(typeof city === 'string', 'City is missing or is not a string')
-        assert(typeof postalCode === 'string', 'Postalcode is missing or is not a string')
+        // assert(typeof postalCode === 'string', 'Postalcode is missing or is not a string')
         next()
     } catch (err) {
         console.log(err)
@@ -66,8 +67,12 @@ const validateUser = (req, res, next) => {
 // Userroutes
 router.post('/api/user', validateUser, userController.create)
 router.get('/api/user', userController.getAll)
-router.get('/api/user/:userId', userController.getById)
+// router.get('/api/user/:userId', userController.getById)
 router.delete('/api/user/:userId', userController.deleteUser)
 router.put('/api/user/:userId', validateUser ,userController.changeUser)
+// get user profile aanmaken
+router.get('/api/user/profile', validateToken, userController.getProfile)
+router.get('/api/user/:userId', userController.getById)
+
 
 module.exports = router
