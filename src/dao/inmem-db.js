@@ -521,17 +521,17 @@ const database = {
         return regex.test(phoneNumber)
     },
 
-    checkUserData(item, emailExists) {
+    checkUserData(item) {
         // The boolean emailExists is used for the change user method. If you want to change the user, but the email stays the same it should be possible. 
         // So a boolean is passed as a parameter. If this boolean is false it means that the email is changed in the change method and it should be checked.
         // If the boolean is true, it means that it stays the same in the change method and that it shouldn't be checked. Because if you would check this email
         // You would get an error saying this emailaddress already exists.
-        if(emailExists === false) {
-            assert.ok(
-                !this.checkIfEmailExists(item.emailAdress),
-                'An user with this emailaddress already exists'
-            )
-        }
+        // if(emailExists === false) {
+        //     assert.ok(
+        //         !this.checkIfEmailExists(item.emailAdress),
+        //         'An user with this emailaddress already exists'
+        //     )
+        // }
         
         assert.ok(
             this.checkPassword(item.password),

@@ -1,7 +1,9 @@
+const { dailyfile } = require('tracer')
 const database = require('../dao/inmem-db')
 const db = require('../dao/mysql-db')
 const logger = require('tracer').console()
 // const logger = require('../util/logger')
+const assert = require('assert')
 
 
 const userService = {
@@ -26,7 +28,19 @@ const userService = {
         const street = user.street
         const city = user.city
 
-        database.checkUserData(user, false)
+        database.checkUserData(user)
+
+        // assert.ok(
+        //     !this.checkIfEmailExists(emailAdress),
+        //     'An user with this emailaddress already exists'
+        // )
+        // this.checkIfEmailExists(emailAdress, (err, emailExists) => {
+        //     if (err) {
+        //         console.error('Error: ' + err)
+        //         return
+        //     }
+        //     console.log('Email exists: ' + emailExists)
+        // })
         
         db.getConnection(function (err, connection) {
 
@@ -81,7 +95,7 @@ const userService = {
             }
 
             connection.query(
-                'SELECT * FROM `user`',
+                'SELECT `id`, `firstName`, `lastName`, `isActive`, `emailAdress`, `phoneNumber`, `roles`, `street`, `city` FROM `user`',
                 // 'SELECT id, firstName, lastName FROM `user`',
                 function (error, results, fields) {
                     connection.release()
@@ -133,20 +147,65 @@ const userService = {
                     //If the count is greater than 0, than the ID exists
                     if(results[0].count > 0){
                         connection.query(
-                            'SELECT * FROM `user` WHERE id = ?', [userId],
-                            function (error, results, fields) {
+                            'SELECT `id`, `firstName`, `lastName`, `isActive`, `emailAdress`, `phoneNumber`, `roles`, `street`, `city` FROM `user` WHERE id = ?', [userId],
+                            // function (error, results, fields) {
+                            //     connection.release()
+            
+                            //     if (error) {
+                            //         logger.error(error)
+                            //         callback(error, null)
+                            //     } else {
+                            //         logger.debug(results)
+                            //         callback(null, {
+                            //             message: `Found user with id ${userId} .`,
+                            //             data: results
+                            //         })
+                            //     }
+                            // }
+                            function (error, userResults, fields) {
                                 connection.release()
             
                                 if (error) {
                                     logger.error(error)
                                     callback(error, null)
-                                } else {
-                                    logger.debug(results)
-                                    callback(null, {
-                                        message: `Found user with id ${userId} .`,
-                                        data: results
-                                    })
-                                }
+                                } 
+            
+                                connection.query(
+                                    'SELECT * FROM meal WHERE cookId = ?',
+                                    [userId],
+                                    function (error, mealResults, fields) {
+                                        connection.release()
+                    
+                                        if (error) {
+                                            logger.error(error)
+                                            callback(error, null)
+                                        } 
+                                        // else {
+                                        //     logger.debug(results)
+                                        //     callback(null, {
+                                        //         message: `Found ${results.length} meals for user ${userId}.`,
+                                        //         data: results
+                                        //     })
+                                        // }
+                                        const profileData = {
+                                            user: userResults[0], // Assuming there's only one user with the given ID
+                                            meals: mealResults
+                                        }
+                                        callback(null, {
+                                            message: `Found user and ${mealResults.length} meals for user ${userId}.`,
+                                            data: profileData
+                                        })
+                                    }
+                                )
+                                
+                                
+                                // else {
+                                //     logger.debug(results)
+                                //     callback(null, {
+                                //         message: `Found ${results.length} user.`,
+                                //         data: results
+                                //     })
+                                // }
                             }
                         )
                     } else {
@@ -161,7 +220,7 @@ const userService = {
         })
     },
 
-    deleteUser: (userId, callback) => {
+    deleteUser: (userId, userIdFromToken, callback) => {
         // database.delete(userId, (err, data) => {
         //     if (err) {
         //         callback(err, null)
@@ -181,7 +240,7 @@ const userService = {
 
             connection.query(
                 'SELECT COUNT(*) AS count FROM `user` WHERE id = ?', [userId],
-                function (error, results, fields) {
+                function (error, countResults, fields) {
                     connection.release()
 
                     if (error) {
@@ -190,26 +249,36 @@ const userService = {
                     } 
                     
                     //If the count is greater than 0, than the ID exists
-                    if(results[0].count > 0){
-                        connection.query(
-                            'DELETE FROM `user` WHERE id = ?', [userId],
-                            function (error, results, fields) {
-                                connection.release()
-            
-                                if (error) {
-                                    logger.error(error)
-                                    callback(error, null)
-                                } else {
-                                    logger.debug(results)
-                                    callback(null, {
-                                        message: `Deleted user with id ${userId} .`,
-                                        data: results
-                                    })
+                    if(countResults[0].count > 0){
+
+                        if(userId === userIdFromToken) {
+                            connection.query(
+                                'DELETE FROM `user` WHERE id = ?', [userId],
+                                function (error, deleteResults, fields) {
+                                    connection.release()
+                
+                                    if (error) {
+                                        logger.error(error)
+                                        callback(error, null)
+                                    } else {
+                                        logger.debug(deleteResults)
+                                        callback(null, {
+                                            message: `Deleted user with id ${userId} .`,
+                                            data: deleteResults
+                                        })
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        } else {
+                            logger.debug(deleteResults)
+                            callback(null, {
+                                message: `The user ${userIdFromToken} is not the owner of user ${userId}`,
+                                data: {}
+                            })
+                        }
+                        
                     } else {
-                        logger.debug(results)
+                        logger.debug(countResults)
                         callback(null, {
                             message: `The ID: ${userId} does not exist`,
                             data: {}
@@ -220,7 +289,7 @@ const userService = {
         })
     },
 
-    changeUser: (user, userId, callback) => {
+    changeUser: (user, userId, userIdFromToken, callback) => {
         // database.change(user, userId, (err, data) => {
         //     if (err) {
         //         callback(err, null)
@@ -241,6 +310,8 @@ const userService = {
         const roles = user.roles
         const street = user.street
         const city = user.city
+
+        database.checkUserData(user)
 
         // const oldEmail = this.getEmailById(userId, (error, succes))
         // const newEmail = emailAdress
@@ -285,24 +356,36 @@ const userService = {
                         //         this.checkUserData(user, false)
                         //     }
                         // })
-                        
-                        connection.query(
-                            'UPDATE `user` SET firstName = ?, lastName = ?, isActive = ?, emailAdress = ?, password = ?, phoneNumber = ?, roles = ?, street = ?, city = ? WHERE id = ?', [firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city, userId],
-                            function (error, results, fields) {
-                                connection.release()
-            
-                                if (error) {
-                                    logger.error(error)
-                                    callback(error, null)
-                                } else {
-                                    logger.debug(results)
-                                    callback(null, {
-                                        message: `Updated user with ID: ${userId}`,
-                                        data: results
-                                    })
+
+
+                        if(userId === userIdFromToken) {
+
+                            connection.query(
+                                'UPDATE `user` SET firstName = ?, lastName = ?, isActive = ?, emailAdress = ?, password = ?, phoneNumber = ?, roles = ?, street = ?, city = ? WHERE id = ?', [firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city, userId],
+                                function (error, results, fields) {
+                                    connection.release()
+                
+                                    if (error) {
+                                        logger.error(error)
+                                        callback(error, null)
+                                    } else {
+                                        logger.debug(results)
+                                        callback(null, {
+                                            message: `Updated user with ID: ${userId}`,
+                                            data: results
+                                        })
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        } else {
+                            logger.debug(results)
+                            callback(null, {
+                                message: `The user ${userIdFromToken} is not the owner of user ${userId}`,
+                                data: {}
+                            })
+                        }
+                        
+                        
                     } else {
                         logger.debug(results)
                         callback(null, {
@@ -326,25 +409,91 @@ const userService = {
             }
 
             connection.query(
-                'SELECT id, firstName, lastName FROM `user` WHERE id = ?',
+                'SELECT * FROM `user` WHERE id = ?',
                 [userId],
-                function (error, results, fields) {
+                function (error, userResults, fields) {
                     connection.release()
 
                     if (error) {
                         logger.error(error)
                         callback(error, null)
-                    } else {
-                        logger.debug(results)
-                        callback(null, {
-                            message: `Found ${results.length} user.`,
-                            data: results
-                        })
-                    }
+                    } 
+
+                    connection.query(
+                        'SELECT * FROM meal WHERE cookId = ?',
+                        [userId],
+                        function (error, mealResults, fields) {
+                            connection.release()
+        
+                            if (error) {
+                                logger.error(error)
+                                callback(error, null)
+                            } 
+                            // else {
+                            //     logger.debug(results)
+                            //     callback(null, {
+                            //         message: `Found ${results.length} meals for user ${userId}.`,
+                            //         data: results
+                            //     })
+                            // }
+                            const profileData = {
+                                user: userResults[0], // Assuming there's only one user with the given ID. Als het goed is kan je [0] ook weglaten
+                                meals: mealResults
+                            }
+                            callback(null, {
+                                message: `Found user and ${mealResults.length} meals for user ${userId}.`,
+                                data: profileData
+                            })
+                        }
+                    )
+                    
+                    
+                    // else {
+                    //     logger.debug(results)
+                    //     callback(null, {
+                    //         message: `Found ${results.length} user.`,
+                    //         data: results
+                    //     })
+                    // }
                 }
             )
+
         })
     }
+
+    // checkIfEmailExists(emailaddress, callback) {
+    //     try {
+    //         db.getConnection(function (err, connection) {
+    //             if (err) {
+    //                 logger.error(err)
+    //                 callback(err, null)
+    //                 return
+    //             }
+    
+    //             connection.query(
+    //                 'SELECT COUNT(*) AS count FROM `user` WHERE emailAdress = ?', [emailaddress],
+    //                 function (error, results, fields) {
+    //                     connection.release()
+    
+    //                     if (error) {
+    //                         logger.error(error)
+    //                         callback(error, null)
+    //                         return
+    //                     } 
+                        
+    //                     //If the count is greater than 0, than the email exists
+    //                     const emailExists = results[0].count > 0
+    //                     callback(null, emailExists)
+    //                 }
+    //             )
+    //         })
+    //     } catch (error) {
+    //         console.error('Error checking if email exists in database: ' + error)
+    //         throw error
+    //     }
+
+    //     return false
+    // }
 
     // getEmailById(userId, callback) {
     //     db.getConnection(function (err, connection) {
