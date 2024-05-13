@@ -78,7 +78,7 @@ let mealController = {
 
         const tokenUserId = req.userId
 
-        mealService.deleteMeal(numberMealId, (error, success) => {
+        mealService.deleteMeal(numberMealId, tokenUserId, (error, success) => {
             if (error) {
                 return next({
                     status: error.status,

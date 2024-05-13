@@ -157,7 +157,7 @@ const mealService = {
         })
     },
 
-    deleteMeal: (mealId, callback) => {
+    deleteMeal: (mealId, userIdFromToken, callback) => {
         // database.deleteMeal(mealId, (err, data) => {
         //     if (err) {
         //         callback(err, null)
@@ -187,44 +187,68 @@ const mealService = {
                 return
             }
 
-            connection.query(
-                'SELECT COUNT(*) AS count FROM `meal` WHERE id = ?', [mealId],
-                function (error, results, fields) {
-                    connection.release()
-
-                    if (error) {
-                        logger.error(error)
-                        callback(error, null)
-                    } 
-                    
-                    //If the count is greater than 0, than the ID exists
-                    if(results[0].count > 0){
                         connection.query(
-                            'DELETE FROM `meal` WHERE id = ?', [mealId],
+                            'SELECT COUNT(*) AS count FROM `meal` WHERE id = ?', [mealId],
                             function (error, results, fields) {
                                 connection.release()
             
                                 if (error) {
                                     logger.error(error)
                                     callback(error, null)
+                                } 
+                                
+                                //If the count is greater than 0, than the ID exists
+                                if(results[0].count > 0){
+                                    connection.query(
+                                        'SELECT cookId FROM `meal` WHERE id = ?', [mealId],
+                                        function (error, results, fields) {
+                                            connection.release()
+
+                                            if (error) {
+                                                logger.error(error)
+                                                callback(error, null)
+                                            }
+                                            // console.log(results[0].cookId + " " + results[0].cookID + " " + userIdFromToken)
+                                            if(results[0].cookId === userIdFromToken) {
+                                                connection.query(
+                                                    'DELETE FROM `meal` WHERE id = ?', [mealId],
+                                                    function (error, results, fields) {
+                                                        connection.release()
+                                    
+                                                        if (error) {
+                                                            logger.error(error)
+                                                            callback(error, null)
+                                                        } else {
+                                                            logger.debug(results)
+                                                            callback(null, {
+                                                                message: `Deleted meal with id ${mealId} .`,
+                                                                data: results
+                                                            })
+                                                        }
+                                                    }
+                                                )
+                                            } else {
+                                                logger.debug(results)
+                                                callback(null, {
+                                                    message: `The user with ${userIdFromToken} doesn't have the authorization to delete this meal.`,
+                                                    data: {}
+                                                })
+                                            }
+                                        }
+                                    )
+                                    
                                 } else {
                                     logger.debug(results)
                                     callback(null, {
-                                        message: `Deleted meal with id ${mealId} .`,
-                                        data: results
-                                    })
+                                        message: `The mealID: ${mealId} does not exist`,
+                                        data: {}
+                                     })
                                 }
                             }
                         )
-                    } else {
-                        logger.debug(results)
-                        callback(null, {
-                            message: `The mealID: ${mealId} does not exist`,
-                            data: {}
-                         })
-                    }
-                }
-            )
+                    
+
+            
         })
     },
 
