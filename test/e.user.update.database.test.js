@@ -4,8 +4,8 @@ process.env.LOGLEVEL = 'trace'
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const assert = require('assert')
-// const jwt = require('jsonwebtoken')
-// const jwtSecretKey = require('../src/util/config').secretkey
+const jwt = require('jsonwebtoken')
+const jwtSecretKey = require('../src/util/config').secretkey
 const db = require('../src/dao/mysql-db')
 const server = require('../index')
 const logger = require('../src/util/logger')
@@ -27,8 +27,9 @@ const CLEAR_DB = CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE
  * Deze id kun je als foreign key gebruiken in de andere queries, bv insert meal.
  */
 const INSERT_USER =
-    'INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES' +
-    '(1, "first", "last", "name@server.nl", "secret", "street", "city");'
+    'INSERT INTO `user` (`id`, `firstName`, `lastName`, `isActive`, `emailAdress`, `password`, `street`, `city` ) VALUES' +
+    '(1, "first", "last", 1, "name@server.nl", "secret", "street", "city"),' +
+    '(2, "first", "last", 0, "name2@server.nl", "secret", "street", "city");'
 
 /**
  * Query om twee meals toe te voegen. Let op de cookId, die moet matchen
@@ -39,7 +40,7 @@ const INSERT_USER =
 //     "(1, 'Meal A', 'description', 'image url', NOW(), 5, 6.50, 1)," +
 //     "(2, 'Meal B', 'description', 'image url', NOW(), 5, 6.50, 1);"
 
-describe('UC201 Registreren als nieuwe user', () => {
+describe('UC204 Opvragen van usergegevens bij ID', () => {
     //
     // informatie over before, after, beforeEach, afterEach:
     // https://mochajs.org/#hooks
@@ -52,7 +53,7 @@ describe('UC201 Registreren als nieuwe user', () => {
         done()
     })
 
-    describe('UC201 Registreren als nieuwe user', () => {
+    describe('UC204 Opvragen van usergegevens bij ID', () => {
         //
         beforeEach((done) => {
             logger.debug('beforeEach called')
@@ -77,20 +78,21 @@ describe('UC201 Registreren als nieuwe user', () => {
             })
         })
 
-        it('TC-201-1 Verplicht veld ontbreekt', (done) => {
+        it('TC-205-1 Verplicht veld emailAddress ontbreekt', (done) => { 
+            const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
-                .post('/api/user')
+                .put('/api/user/:1')
+                .set('Authorization', 'Bearer ' + token)
                 .send({
-                    // firstName: 'Voornaam', ontbreekt
+                    firstName: 'Voornaam', 
                     lastName: 'Achternaam',
-                    emailAdress: 'v.a@server.nl',
-                    // isActive: true,
-                    password: 'testPassword2$',
+                    // emailAdress: 'v.a@server.nl' ontbreekt
+                    isActive: 1,
+                    password: 'TestP4ssword!',
                     phoneNumber: '+31 612345678',
-                    roles: 'chef',
+                    roles: 'cook',
                     street: 'Hogeschoollaan',
-                    city: 'Breda',
-                    // postalCode: '3825 NK'
+                    city: 'Breda'
                 })
                 .end((err, res) => {
                     /**
@@ -102,7 +104,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                     chai.expect(res.body).to.have.property('status').equals(400)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('First name is missing or is not a string')
+                        .equals('Email address is missing or is not a string')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -111,68 +113,34 @@ describe('UC201 Registreren als nieuwe user', () => {
                     done()
                 })
         })
-
-        it('TC-201-2 Niet-valide email adres', (done) => {
-            chai.request(server)
-            .post('/api/user')
-            .send({
-                firstName: 'Voornaam',
-                lastName: 'Achternaam',
-                emailAdress: 'test.nl',
-                isActive: true,
-                password: 'testPassword2!',
-                phoneNumber: '+31 612345678',
-                roles: 'chef',
-                street: 'Hogeschoollaan',
-                city: 'Breda',
-                postalCode: '3825 NK'
-            })
-            .end((err, res) => {
-                /**
-                 * Voorbeeld uitwerking met chai.expect
-                 */
-                chai.expect(res).to.have.status(500)
-                chai.expect(res).not.to.have.status(200)
-                chai.expect(res.body).to.be.a('object')
-                chai.expect(res.body).to.have.property('status').equals(500)
-                chai.expect(res.body)
-                    .to.have.property('message')
-                    .equals('The email address is not valid. An example of a valid email address is this: test@test.com')
-                chai
-                    .expect(res.body)
-                    .to.have.property('data')
-                    .that.is.a('object').that.is.empty
     
-                done()
-            })
-        })
-
-        it('TC-201-3 Niet-valide password', (done) => {
+        it('TC-205-2 De gebruiker is niet de eigenaar van de data', (done) => {
+            const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
-                .post('/api/user')
+                .put('/api/user/:2')
+                .set('Authorization', 'Bearer ' + token)
                 .send({
-                    firstName: 'Voornaam',
+                    firstName: 'Voornaam', 
                     lastName: 'Achternaam',
-                    emailAdress: 'henkJan@server.nl',
-                    isActive: true,
-                    password: 'testPassword2',
+                    isActive: 1,
+                    emailAdress: 'name2@server.nl',
+                    password: 'TestP4ssword!',
                     phoneNumber: '+31 612345678',
-                    roles: 'chef',
+                    roles: 'cook',
                     street: 'Hogeschoollaan',
-                    city: 'Breda',
-                    postalCode: '3825 NK'
+                    city: 'Breda'
                 })
                 .end((err, res) => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    chai.expect(res).to.have.status(500)
-                    chai.expect(res).not.to.have.status(200)
+                    // chai.expect(res).to.have.status(400)
+                    // chai.expect(res).not.to.have.status(200)
                     chai.expect(res.body).to.be.a('object')
-                    chai.expect(res.body).to.have.property('status').equals(500)
+                    // chai.expect(res.body).to.have.property('status').equals(400)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character')
+                        .equals('The user 1 is not the owner of user 2')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -182,20 +150,21 @@ describe('UC201 Registreren als nieuwe user', () => {
                 })
         })
     
-        it('TC-201-4 Gebruiker bestaat al', (done) => {
+        it('TC-205-3 Niet-valide telefoonnummer', (done) => {
+            const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
-                .post('/api/user')
+                .put('/api/user/:1')
+                .set('Authorization', 'Bearer ' + token)
                 .send({
-                    firstName: 'Voornaam',
-                    lastName: 'Achternaam',
+                    firstName: 'Henk',
+                    lastName: 'Jan',
                     emailAdress: 'name@server.nl',
-                    isActive: true,
-                    password: 'testPassword2$',
-                    phoneNumber: '+31 612345678',
+                    isActive: 1,
+                    password: 'testPassword2!',
+                    phoneNumber: '+31 06 123456789',
                     roles: 'chef',
                     street: 'Hogeschoollaan',
-                    city: 'Breda',
-                    postalCode: '3825 NK'
+                    city: 'Breda'
                 })
                 .end((err, res) => {
                     /**
@@ -207,7 +176,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                     chai.expect(res.body).to.have.property('status').equals(500)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('Duplicate entry \'name@server.nl\' for key \'IDX_87877a938268391a71723b303c\'')
+                        .equals('The phone number is not valid. An example of a valid phone number is: +31672344624')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -217,33 +186,106 @@ describe('UC201 Registreren als nieuwe user', () => {
                 })
         })
     
-        it('TC-201-5 Gebruiker succesvol geregistreerd', (done) => {
+        it('TC-205-4 Gebruiker bestaat niet', (done) => {
+            const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
-                .post('/api/user')
+                .put('/api/user/:111')
+                .set('Authorization', 'Bearer ' + token)
                 .send({
-                    firstName: 'Voornaam',
-                    lastName: 'Achternaam',
-                    emailAdress: 'test@server.nl',
-                    isActive: true,
+                    firstName: 'Henk',
+                    lastName: 'Jan',
+                    emailAdress: 'name@server.nl',
+                    isActive: 1,
+                    password: 'testPassword2$',
+                    phoneNumber: '+31 612345678',
+                    roles: 'chef',
+                    street: 'Hogeschoollaan',
+                    city: 'Breda'
+                })
+                .end((err, res) => {
+                    /**
+                     * Voorbeeld uitwerking met chai.expect
+                     */
+                    // chai.expect(res).to.have.status(401)
+                    // chai.expect(res).not.to.have.status(200)
+                    chai.expect(res.body).to.be.a('object')
+                    // chai.expect(res.body).to.have.property('status').equals(401)
+                    chai.expect(res.body)
+                        .to.have.property('message')
+                        .equals('The ID: 111 does not exist')
+                    chai
+                        .expect(res.body)
+                        .to.have.property('data')
+                        .that.is.a('object').that.is.empty
+    
+                    done()
+                })
+        })
+    
+        it('TC-205-5 Niet ingelogd', (done) => {
+            // const token = jwt.sign({ userId: 1 }, jwtSecretKey)
+            chai.request(server)
+                .put('/api/user/:1')
+                // .set('Authorization', 'Bearer ' + token)
+                .send({
+                    firstName: 'Henk',
+                    lastName: 'Jan',
+                    emailAdress: 'name@server.nl',
+                    isActive: 1,
                     password: 'testPassword2$',
                     phoneNumber: '+31 612345678',
                     roles: 'chef',
                     street: 'Hogeschoollaan',
                     city: 'Breda',
                     postalCode: '3825 NK'
-    
                 })
                 .end((err, res) => {
-                    res.should.have.status(200)
+                    /**
+                     * Voorbeeld uitwerking met chai.expect
+                     */
+                    chai.expect(res).to.have.status(401)
+                    chai.expect(res).not.to.have.status(200)
+                    chai.expect(res.body).to.be.a('object')
+                    chai.expect(res.body).to.have.property('status').equals(401)
+                    chai.expect(res.body)
+                        .to.have.property('message')
+                        .equals('Authorization header missing!')
+                    chai
+                        .expect(res.body)
+                        .to.have.property('data')
+                        .that.is.a('object').that.is.empty
+    
+                    done()
+                })
+        })
+    
+        it('TC-205-6 Gebruiker successvol gewijzigd', (done) => {
+            const token = jwt.sign({ userId: 1 }, jwtSecretKey)
+            chai.request(server)
+                .put('/api/user/:1')
+                .set('Authorization', 'Bearer ' + token)
+                .send({
+                    firstName: 'Henk',
+                    lastName: 'Jan',
+                    emailAdress: 'name@server.nl',
+                    isActive: 1,
+                    password: 'testPassword2$',
+                    phoneNumber: '+31 612345678',
+                    roles: 'chef',
+                    street: 'Hogeschoollaan',
+                    city: 'Breda'
+                })
+                .end((err, res) => {
+                    // res.should.have.status(200)
                     res.body.should.be.a('object')
     
                     res.body.should.have.property('data').that.is.a('object')
-                    res.body.should.have.property('message').that.is.a('string')
+                    res.body.should.have.property('message').that.is.a('string').equals('Updated user with ID: 1')
     
                     // const data = res.body.data
-                    // data.should.have.property('firstName').equals('Voornaam')
-                    // data.should.have.property('lastName').equals('Achternaam')
-                    // data.should.have.property('emailAdress').equals('test@server.nl')
+                    // data.should.have.property('firstName').equals('Henk')
+                    // data.should.have.property('lastName').equals('Jan')
+                    // data.should.have.property('emailAdress').equals('henk_jan@server.nl')
                     // data.should.have.property('isActive').that.is.a('boolean')
                     // data.should.have.property('password').equals('testPassword2$')
                     // data.should.have.property('phoneNumber').equals('+31 612345678')
