@@ -78,7 +78,7 @@ describe('UC301 Toevoegen van maaltijd', () => {
             })
         })
 
-        it.skip('TC-301-1 Verplicht veld ontbreekt', (done) => { 
+        it('TC-301-1 Verplicht veld ontbreekt', (done) => { 
             const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
             .post('/api/meal')
@@ -88,13 +88,13 @@ describe('UC301 Toevoegen van maaltijd', () => {
                 isVega: 0,
                 isVegan: 1,
                 isToTakeHome: 1,
-                dateTime: '2023$',
+                dateTime: '2024-05-15 18:00:00',
                 maxAmountOfParticipants: 4,
                 price: 5.45,
                 imageUrl: 'testURL.nl',
                 // name: 'Spaghetti',
                 description: 'Overheerlijke pasta',
-                allergenes: ["gluten", "lactose"]
+                allergenes: "gluten"
             })
             .end((err, res) => {
                 /**
@@ -142,7 +142,7 @@ describe('UC301 Toevoegen van maaltijd', () => {
                 })
         })
 
-        it.skip('TC-301-3 Maaltijd succesvol toegevoegd', (done) => { 
+        it('TC-301-3 Maaltijd succesvol toegevoegd', (done) => { 
             const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
             .post('/api/meal')
@@ -152,7 +152,7 @@ describe('UC301 Toevoegen van maaltijd', () => {
                 isVega: 0,
                 isVegan: 1,
                 isToTakeHome: 1,
-                dateTime: '2023$',
+                dateTime: '2024-05-15 18:00:00',
                 maxAmountOfParticipants: 4,
                 price: 5.45,
                 imageUrl: 'testURL.nl',

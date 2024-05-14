@@ -29,7 +29,9 @@ const CLEAR_DB = CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE
 const INSERT_USER =
     'INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES' +
     '(1, "first", "last", "name@server.nl", "secret", "street", "city"),' +
-    '(2, "first", "last", "c.lastname@domain.com", "secret", "street", "city");'
+    '(2, "first", "last", "c.lastname@domain.com", "secret", "street", "city"),' +
+    '(3,"Herman","Huizinga","h.huizinga@server.nl","secret", "street","city");'
+    
     
 
 /**
@@ -185,13 +187,13 @@ describe('UC201 Registreren als nieuwe user', () => {
                 })
         })
     
-        it.skip('TC-201-4 Gebruiker bestaat al', (done) => {
+        it('TC-201-4 Gebruiker bestaat al', (done) => {
             chai.request(server)
                 .post('/api/user')
                 .send({
                     firstName: 'Voornaam',
                     lastName: 'Achternaam',
-                    emailAdress: 'c.lastname@domain.com',
+                    emailAdress: 'h.huizinga@server.nl',
                     isActive: 1,
                     password: 'testPassword2$',
                     phoneNumber: '06-12345678',
@@ -209,7 +211,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                     chai.expect(res.body).to.have.property('status').equals(500)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('Duplicate entry \'c.lastname@domain.com\' for key \'IDX_87877a938268391a71723b303c\'')
+                        .equals('Duplicate entry \'h.huizinga@server.nl\' for key \'IDX_87877a938268391a71723b303c\'')
                     chai
                         .expect(res.body)
                         .to.have.property('data')

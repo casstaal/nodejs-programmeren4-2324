@@ -85,7 +85,7 @@ describe('UC206 Verwijderen van user', () => {
         it.skip('TC-206-1 Gebruiker bestaat niet', (done) => { 
             const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
-                .delete('/api/user/:19999')
+                .delete('/api/user/:999')
                 .set('Authorization', 'Bearer ' + token)
                 .end((err, res) => {
                     /**
@@ -97,7 +97,7 @@ describe('UC206 Verwijderen van user', () => {
                     chai.expect(res.body).to.have.property('status').equals(404)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('The user with ID 19999 does not exist')
+                        .equals('The user with ID 999 does not exist')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
