@@ -321,7 +321,7 @@ const userService = {
                                                 } else {
                                                     logger.debug(userResults[0])
                                                     callback(null, {
-                                                        status: 201,
+                                                        status: 200,
                                                         message: `Updated user with id ${userId}`,
                                                         data: userResults[0]
                                                     })

@@ -143,7 +143,7 @@ describe('UC305 Verwijderen van maaltijd', () => {
                 // chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('The mealID: 4 does not exist')
+                    .equals('The meal with ID 4 does not exist')
                 chai
                     .expect(res.body)
                     .to.have.property('data')
@@ -168,7 +168,7 @@ describe('UC305 Verwijderen van maaltijd', () => {
                 // chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('Deleted meal with id 2 .')
+                    .equals('Maaltijd met ID 2 is verwijderd.')
                 chai
                     .expect(res.body)
                     .to.have.property('data')

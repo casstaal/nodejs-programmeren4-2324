@@ -164,10 +164,10 @@ describe('UC301 Toevoegen van maaltijd', () => {
                 /**
                  * Voorbeeld uitwerking met chai.expect
                  */
-                chai.expect(res).to.have.status(200)
+                chai.expect(res).to.have.status(201)
                 chai.expect(res).not.to.have.status(400)
                 chai.expect(res.body).to.be.a('object')
-                chai.expect(res.body).to.have.property('status').equals(200)
+                chai.expect(res.body).to.have.property('status').equals(201)
                 chai.expect(res.body)
                     .to.have.property('message')
                     .equals('Added new meal: Spaghetti')

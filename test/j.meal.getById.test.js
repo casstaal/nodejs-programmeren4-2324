@@ -92,7 +92,7 @@ describe('UC304 Opvragen van maaltijd bij ID', () => {
                 chai.expect(res.body).to.have.property('status').equals(200)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('The mealID: 4 does not exist')
+                    .equals('The meal with ID 4 does not exist')
                 chai
                     .expect(res.body)
                     .to.have.property('data')

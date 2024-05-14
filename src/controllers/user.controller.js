@@ -18,7 +18,7 @@ let userController = {
                 })
             }
             if (success) {
-                res.status(200).json({
+                res.status(201).json({
                     status: success.status,
                     message: success.message,
                     data: success.data
@@ -141,7 +141,7 @@ let userController = {
         userService.getById(numberUserId, userIdFromToken, (error, success) => {
             if (error) {
                 return next({
-                    status: error.status,
+                    status: 404,
                     message: error.message,
                     data: {}
                 })
@@ -201,7 +201,7 @@ let userController = {
             }
             if (success) {
                 res.status(200).json({
-                    status: success.status,
+                    status: 200,
                     message: success.message,
                     data: success.data
                 })

@@ -508,7 +508,7 @@ const database = {
 
     checkIfEmailIsValid(email) { 
         // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        const regex = /^[a-zA-Z]{0,1}\.[a-zA-Z]{2,}@[a-zA-Z]{2,}+\.[a-zA-Z]{2,3}$/
+        const regex = /^[a-zA-Z]\.[a-zA-Z]{2,}@[a-zA-Z]{2,}\.[a-zA-Z]{2,3}$/
         return regex.test(email);
     },
 
@@ -537,11 +537,11 @@ const database = {
         
         assert.ok(
             this.checkPassword(item.password),
-            'The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character'
+            'The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter and a number'
         )
         assert.ok(
             this.checkIfEmailIsValid(item.emailAdress),
-            'The email address is not valid. An example of a valid email address is this: test@test.com'
+            'The email address is not valid. An example of a valid email address is this: n.lastname@domain.com'
         )
         // assert.ok(
         //     this.validatePostalCode(item.postalCode),
@@ -549,7 +549,7 @@ const database = {
         // )
         assert.ok(
             this.validatePhoneNumber(item.phoneNumber),
-            'The phone number is not valid. An example of a valid phone number is: +31672344624'
+            'The phone number is not valid. An example of a valid phone number is: 06 12345678 and 06-12345678'
         )
     }
 }

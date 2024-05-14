@@ -28,11 +28,14 @@ const CLEAR_DB = CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE
  */
 const INSERT_USER =
     'INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES' +
-    '(1, "first", "last", "name@server.nl", "secret", "street", "city");'
+    '(1, "first", "last", "name@server.nl", "secret", "street", "city"),' +
+    '(2, "first", "last", "c.lastname@domain.com", "secret", "street", "city");'
+    
 
 /**
  * Query om twee meals toe te voegen. Let op de cookId, die moet matchen
  * met een bestaande user in de database.
+ * 
  */
 // const INSERT_MEALS =
 //     'INSERT INTO `meal` (`id`, `name`, `description`, `imageUrl`, `dateTime`, `maxAmountOfParticipants`, `price`, `cookId`) VALUES' +
@@ -137,7 +140,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                 chai.expect(res.body).to.have.property('status').equals(500)
                 chai.expect(res.body)
                     .to.have.property('message')
-                    .equals('The email address is not valid. An example of a valid email address is this: test@test.com')
+                    .equals('The email address is not valid. An example of a valid email address is this: n.lastname@domain.com')
                 chai
                     .expect(res.body)
                     .to.have.property('data')
@@ -153,10 +156,10 @@ describe('UC201 Registreren als nieuwe user', () => {
                 .send({
                     firstName: 'Voornaam',
                     lastName: 'Achternaam',
-                    emailAdress: 'henkJan@server.nl',
+                    emailAdress: 'm.lastname@domain.com',
                     isActive: true,
-                    password: 'testPassword2',
-                    phoneNumber: '+31 612345678',
+                    password: 'testpassword2',
+                    phoneNumber: '06-12345678',
                     roles: 'chef',
                     street: 'Hogeschoollaan',
                     city: 'Breda',
@@ -167,12 +170,12 @@ describe('UC201 Registreren als nieuwe user', () => {
                      * Voorbeeld uitwerking met chai.expect
                      */
                     chai.expect(res).to.have.status(500)
-                    chai.expect(res).not.to.have.status(200)
+                    chai.expect(res).not.to.have.status(201)
                     chai.expect(res.body).to.be.a('object')
                     chai.expect(res.body).to.have.property('status').equals(500)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter, an lowercase letter, a number and a special character')
+                        .equals('The password is not valid. A valid password is at least 8 characters long, contains an uppercase letter and a number')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -188,14 +191,13 @@ describe('UC201 Registreren als nieuwe user', () => {
                 .send({
                     firstName: 'Voornaam',
                     lastName: 'Achternaam',
-                    emailAdress: 'name@server.nl',
-                    isActive: true,
+                    emailAdress: 'c.lastname@domain.com',
+                    isActive: 1,
                     password: 'testPassword2$',
-                    phoneNumber: '+31 612345678',
+                    phoneNumber: '06-12345678',
                     roles: 'chef',
                     street: 'Hogeschoollaan',
-                    city: 'Breda',
-                    postalCode: '3825 NK'
+                    city: 'Breda'
                 })
                 .end((err, res) => {
                     /**
@@ -207,7 +209,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                     chai.expect(res.body).to.have.property('status').equals(500)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('Duplicate entry \'name@server.nl\' for key \'IDX_87877a938268391a71723b303c\'')
+                        .equals('Duplicate entry \'c.lastname@domain.com\' for key \'IDX_87877a938268391a71723b303c\'')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -223,11 +225,11 @@ describe('UC201 Registreren als nieuwe user', () => {
                 .send({
                     firstName: 'Voornaam',
                     lastName: 'Achternaam',
-                    emailAdress: 'test@server.nl',
+                    emailAdress: 'n.lastname@domain.com',
                     isActive: 1,
                     password: 'testPassword2$',
-                    phoneNumber: '+31 612345678',
-                    roles: 'chef',
+                    phoneNumber: '06-12345678',
+                    roles: '',
                     street: 'Hogeschoollaan',
                     city: 'Breda'
     
@@ -244,11 +246,11 @@ describe('UC201 Registreren als nieuwe user', () => {
                     const data = res.body.data
                     data.should.have.property('firstName').equals('Voornaam')
                     data.should.have.property('lastName').equals('Achternaam')
-                    data.should.have.property('emailAdress').equals('test@server.nl')
+                    data.should.have.property('emailAdress').equals('n.lastname@domain.com')
                     data.should.have.property('isActive').that.is.a('number')
                     data.should.have.property('password').equals('testPassword2$')
-                    data.should.have.property('phoneNumber').equals('+31 612345678')
-                    data.should.have.property('roles').equals('chef')
+                    data.should.have.property('phoneNumber').equals('06-12345678')
+                    data.should.have.property('roles').equals('')
                     data.should.have.property('street').equals('Hogeschoollaan')
                     data.should.have.property('city').equals('Breda')
     

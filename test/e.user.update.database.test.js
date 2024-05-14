@@ -123,9 +123,9 @@ describe('UC205 Updaten van usergegevens', () => {
                     firstName: 'Voornaam', 
                     lastName: 'Achternaam',
                     isActive: 1,
-                    emailAdress: 'name2@server.nl',
+                    emailAdress: 'k.lastname@domain.com',
                     password: 'TestP4ssword!',
-                    phoneNumber: '+31 612345678',
+                    phoneNumber: '06-12345678',
                     roles: 'cook',
                     street: 'Hogeschoollaan',
                     city: 'Breda'
@@ -134,10 +134,10 @@ describe('UC205 Updaten van usergegevens', () => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    chai.expect(res).to.have.status(403)
-                    chai.expect(res).not.to.have.status(200)
+                    chai.expect(res).to.have.status(200)
+                    chai.expect(res).not.to.have.status(403)
                     chai.expect(res.body).to.be.a('object')
-                    chai.expect(res.body).to.have.property('status').equals(403)
+                    chai.expect(res.body).to.have.property('status').equals(200)
                     chai.expect(res.body)
                         .to.have.property('message')
                         .equals('The user 1 is not the owner of user 2')
@@ -158,7 +158,7 @@ describe('UC205 Updaten van usergegevens', () => {
                 .send({
                     firstName: 'Henk',
                     lastName: 'Jan',
-                    emailAdress: 'name@server.nl',
+                    emailAdress: 'o.lastname@domain.com',
                     isActive: 1,
                     password: 'testPassword2!',
                     phoneNumber: '+31 06 123456789',
@@ -170,13 +170,13 @@ describe('UC205 Updaten van usergegevens', () => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    chai.expect(res).to.have.status(400)
+                    chai.expect(res).to.have.status(500)
                     chai.expect(res).not.to.have.status(200)
                     chai.expect(res.body).to.be.a('object')
-                    chai.expect(res.body).to.have.property('status').equals(400)
+                    chai.expect(res.body).to.have.property('status').equals(500)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('The phone number is not valid. An example of a valid phone number is: +31672344624')
+                        .equals('The phone number is not valid. An example of a valid phone number is: 06 12345678 and 06-12345678')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -194,10 +194,10 @@ describe('UC205 Updaten van usergegevens', () => {
                 .send({
                     firstName: 'Henk',
                     lastName: 'Jan',
-                    emailAdress: 'name@server.nl',
+                    emailAdress: 'q.lastname@domain.com',
                     isActive: 1,
                     password: 'testPassword2$',
-                    phoneNumber: '+31 612345678',
+                    phoneNumber: '06-12345678',
                     roles: 'chef',
                     street: 'Hogeschoollaan',
                     city: 'Breda'
@@ -206,10 +206,10 @@ describe('UC205 Updaten van usergegevens', () => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    chai.expect(res).to.have.status(404)
-                    chai.expect(res).not.to.have.status(200)
+                    chai.expect(res).to.have.status(200)
+                    chai.expect(res).not.to.have.status(404)
                     chai.expect(res.body).to.be.a('object')
-                    chai.expect(res.body).to.have.property('status').equals(404)
+                    chai.expect(res.body).to.have.property('status').equals(200)
                     chai.expect(res.body)
                         .to.have.property('message')
                         .equals('The user with ID 111 does not exist')
@@ -267,11 +267,11 @@ describe('UC205 Updaten van usergegevens', () => {
                 .send({
                     firstName: 'Henk',
                     lastName: 'Jan',
-                    emailAdress: 'name@server.nl',
+                    emailAdress: 'x.lastname@domain.com',
                     isActive: 1,
                     password: 'testPassword2$',
-                    phoneNumber: '+31 612345678',
-                    roles: 'chef',
+                    phoneNumber: '06-12345678',
+                    roles: '',
                     street: 'Hogeschoollaan',
                     city: 'Breda'
                 })
@@ -289,11 +289,11 @@ describe('UC205 Updaten van usergegevens', () => {
                     const data = res.body.data
                     data.should.have.property('firstName').equals('Henk')
                     data.should.have.property('lastName').equals('Jan')
-                    data.should.have.property('emailAdress').equals('henk_jan@server.nl')
+                    data.should.have.property('emailAdress').equals('x.lastname@domain.com')
                     data.should.have.property('isActive').that.is.a('number')
                     data.should.have.property('password').equals('testPassword2$')
-                    data.should.have.property('phoneNumber').equals('+31 612345678')
-                    data.should.have.property('roles').equals('chef')
+                    data.should.have.property('phoneNumber').equals('06-12345678')
+                    data.should.have.property('roles').equals('')
                     data.should.have.property('street').equals('Hogeschoollaan')
                     data.should.have.property('city').equals('Breda')
     

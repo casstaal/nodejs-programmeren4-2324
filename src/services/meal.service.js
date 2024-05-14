@@ -49,7 +49,7 @@ const mealService = {
                                     logger.debug(mealResults[0])
                                     callback(null, {
                                         status: 201,
-                                        message: `Added new meal: ${name} with ID ${mealId}`,
+                                        message: `Added new meal: ${name}`,
                                         data: mealResults[0]
                                     })
                                 }
