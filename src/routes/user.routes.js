@@ -55,7 +55,7 @@ const validateUser = (req, res, next) => {
         console.log(err)
         
         return next({
-            // error wordt doorgestuurd naar de error handler in index.js
+            // error is send to the error handler in index.js
             status: 400,
             message: err.message,
             data: {}
@@ -64,12 +64,11 @@ const validateUser = (req, res, next) => {
 }
 
 // Userroutes
+//ValidateUser is added to make sure that the user is valid and validateToken is added to make sure that the authorization token passed as a header is valid
 router.post('/api/user', validateUser, userController.create)
 router.get('/api/user', validateToken, userController.getAll)
-// router.get('/api/user/:userId', userController.getById)
 router.delete('/api/user/:userId', validateToken, userController.deleteUser)
 router.put('/api/user/:userId', validateToken, validateUser ,userController.changeUser)
-// get user profile aanmaken
 router.get('/api/user/profile', validateToken, userController.getProfile)
 router.get('/api/user/:userId', validateToken, userController.getById)
 

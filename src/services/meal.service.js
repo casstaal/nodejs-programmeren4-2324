@@ -1,10 +1,11 @@
-const database = require('../dao/inmem-db')
 const db = require('../dao/mysql-db')
 var logger = require('tracer').console()
 
 const mealService = {
+    //Creates a new meal in the database
     create: (meal, cookId, callback) => {
         
+        //Sets the meal values from the raw JSON body from the client request
         const isActive = meal.isActive
         const isVega = meal.isVega
         const isVegan = meal.isVegan
@@ -18,6 +19,7 @@ const mealService = {
         const description = meal.description
         const allergenes = meal.allergenes
         
+        //Create database connection
         db.getConnection(function (err, connection) {
 
             if (err) {
@@ -26,7 +28,7 @@ const mealService = {
                 return
             }
 
-
+            //Execute insert query
             connection.query(
                 'INSERT INTO `meal` (isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, allergenes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookID, name, description, allergenes],
                 function (error, results, fields) {
@@ -38,6 +40,7 @@ const mealService = {
                     } else {
                         const mealId = results.insertId
 
+                        //Execute SELECT query to get the newly created meal to display it in the JSON object
                         connection.query(
                             'SELECT * FROM `meal` WHERE id = ?', [mealId],
                             function (error, mealResults, fields) {
@@ -61,8 +64,10 @@ const mealService = {
         })
     },
 
+    //Gets all the meals from the database
     getAll: (callback) => {
         
+        //Create database connection
         db.getConnection(function (err, connection) {
             if (err) {
                 logger.error(err)
@@ -70,6 +75,7 @@ const mealService = {
                 return
             }
 
+            //Exectue select query
             connection.query(
                 //Using a LEFT JOIN to ensure that every meal is returned.
                 'SELECT * FROM `meal` LEFT JOIN `user` ON meal.cookId = user.id',
@@ -121,8 +127,10 @@ const mealService = {
         })
     },
 
+    //Gets a meal by id from the database
     getById: (mealId, callback) => {
         
+        //Create database connection
         db.getConnection(function (err, connection) {
             if (err) {
                 logger.error(err)
@@ -130,6 +138,7 @@ const mealService = {
                 return
             }
 
+            //Execute select query
             connection.query(
                 'SELECT COUNT(*) AS count FROM `meal` WHERE id = ?', [mealId],
                 function (error, results, fields) {
@@ -202,6 +211,7 @@ const mealService = {
         })
     },
 
+    //Deletes a meal from the database
     deleteMeal: (mealId, userIdFromToken, callback) => {
 
         db.getConnection(function (err, connection) {
@@ -232,7 +242,7 @@ const mealService = {
                                                 logger.error(error)
                                                 callback(error, null)
                                             }
-                                            // console.log(results[0].cookId + " " + results[0].cookID + " " + userIdFromToken)
+                                            //If the cookId is the same as the user id from the token, then the user is the owner of the meal and can delete the meal.
                                             if(results[0].cookId === userIdFromToken) {
                                                 connection.query(
                                                     'DELETE FROM `meal` WHERE id = ?', [mealId],

@@ -1,18 +1,11 @@
-//
-// Authentication routes
-//
 const express = require('express')
 const router = express.Router()
 const assert = require('assert')
 const jwt = require('jsonwebtoken')
 const jwtSecretKey = require('../util/config').secretkey
-// const routes = require('express').Router()
 const authenticationController = require('../controllers/authentication.controller')
 const logger = require('../util/logger')
 
-//
-//
-//
 function validateLogin(req, res, next) {
     // Verify that we receive the expected input
     try {
@@ -34,9 +27,6 @@ function validateLogin(req, res, next) {
     }
 }
 
-//
-//
-//
 function validateToken(req, res, next) {
     logger.info('validateToken called')
     logger.trace('Headers:', req.headers)
@@ -64,12 +54,7 @@ function validateToken(req, res, next) {
             }
             if (payload) {
                 logger.debug('token is valid', payload)
-                /**
-                 * User heeft toegang.
-                 * BELANGRIJK! Voeg UserId uit payload toe aan request,
-                 * zodat die voor ieder volgend endpoint beschikbaar is.
-                 * Je hebt dan altijd toegang tot de userId van de ingelogde gebruiker.
-                 */
+        
                 req.userId = payload.userId
                 next()
             }
@@ -79,6 +64,5 @@ function validateToken(req, res, next) {
 
 router.post('/api/login', validateLogin, authenticationController.login)
 
-// module.exports = router
-
+// Validate is passed with the router so that you can use the method validateToken in other files.
 module.exports = { router, validateToken }

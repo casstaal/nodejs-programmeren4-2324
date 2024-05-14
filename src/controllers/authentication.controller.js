@@ -1,9 +1,7 @@
-//
-// Authentication controller
-//
 const logger = require('../util/logger')
 const authService = require('../services/authentication.service')
 
+//Handles user login requests
 const authController = {
     login: (req, res, next) => {
         const userCredentials = req.body

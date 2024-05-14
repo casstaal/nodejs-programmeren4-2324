@@ -4,11 +4,11 @@ const logger = require('../util/logger')
 
 
 let userController = {
+    //Handles create user requests
     create: (req, res, next) => {
+        //Gets the user from the raw json body
         const user = req.body
-        //
-        // Todo: Validate user input
-        //
+
         userService.create(user, (error, success) => {
             if (error) {
                 return next({
@@ -27,7 +27,9 @@ let userController = {
         })
     },
 
+    //Handles getAll users requests
     getAll: (req, res, next) => {
+        //Gets the query fields from the url
         const queryField = Object.entries(req.query)
 
         userService.getAll((error, success) => {
@@ -39,6 +41,7 @@ let userController = {
                 })
             }
             if (success) {
+                //Used for 2 query filter parameters
                 if(queryField.length === 2) {
                     console.log(`This is field 1 ${queryField[0][0]} = ${queryField[0][1]}`)
                     console.log(`This is field 2 ${queryField[1][0]} = ${queryField[1][1]}`)
@@ -52,6 +55,8 @@ let userController = {
                     //     myBool = (queryValue1 === 'true')
                     //     queryValue1 = myBool
                     // } 
+
+                    //Used to make the id or isActive a integer instead of a string
                     if(queryField1 === 'id' || queryField1 === 'isActive') {
                         myBool = parseInt(queryValue1)
                         queryValue1 = myBool
@@ -62,6 +67,8 @@ let userController = {
                     //     myBool2 = (queryValue2 === 'true')
                     //     queryValue2 = myBool2
                     // }  
+
+                    //Used to make the id or isActive a integer instead of a string
                     if(queryField2 === 'id' || queryField2 === 'isActive') {
                         myBool2 = parseInt(queryValue2)
                         queryValue2 = myBool2
@@ -82,6 +89,7 @@ let userController = {
                             data: filteredData
                         })
                     }
+                //Used for 1 query filter parameter
                 } else if(queryField.length === 1) {
                     console.log(`Dit is field 1 ${queryField[0][0]} = ${queryField[0][1]}`)
                     const queryFieldLength1 = queryField[0][0]
@@ -92,6 +100,8 @@ let userController = {
                     //     myBool1 = (queryValueLength1 === 'true')
                     //     queryValueLength1 = myBool1
                     // } 
+
+                    //Used to make the id or isActive a integer instead of a string
                     if(queryFieldLength1 === 'id' || queryFieldLength1 === 'isActive') {
                         myBool1 = parseInt(queryValueLength1)
                         queryValueLength1 = myBool1
@@ -113,7 +123,7 @@ let userController = {
                         })
                     }
                     
-                    
+                //Used if there are none query field parameters    
                 } else if(queryField.length === 0) {
                     res.status(200).json({
                         status: 200,
@@ -131,11 +141,14 @@ let userController = {
         })
     },
 
+    //Handles get user by id requests
     getById: (req, res, next) => {
+        //Gets the id passed as a parameter key, deletes the : and makes it an integer
         let userId = req.params.userId
         let myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
 
+        //Gets the userId from the token passed as the authorization header
         const userIdFromToken = req.userId
 
         userService.getById(numberUserId, userIdFromToken, (error, success) => {
@@ -156,12 +169,14 @@ let userController = {
         })
     },
 
-    // Todo: Implement the update and delete methods
+    //Handles delete user requests
     deleteUser: (req, res, next) => {
+        //Gets the id passed as a parameter key, deletes the : and makes it an integer
         let userId = req.params.userId
         let myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
 
+        //Gets the userId from the token passed as the authorization header
         const userIdFromToken = req.userId
 
         userService.deleteUser(numberUserId, userIdFromToken, (error, success) => {
@@ -182,12 +197,15 @@ let userController = {
         })
     },
 
+    //Handles change user requests
     changeUser: (req, res, next) => {
+        //Gets the id passed as a parameter key, deletes the : and makes it an integer
         const userId = req.params.userId
         const myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
         const user = req.body
 
+        //Gets the userId from the token passed as the authorization header
         const userIdFromToken = req.userId
 
 
@@ -209,7 +227,9 @@ let userController = {
         })
     },
 
+    //Handles the get profile requests
     getProfile: (req, res, next) => {
+        //Gets the userId from the token passed as the authorization header
         const userId = req.userId
         logger.trace('getProfile for userId', userId)
         userService.getProfile(userId, (error, success) => {

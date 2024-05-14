@@ -57,7 +57,7 @@ const validateMeal = (req, res, next) => {
         console.log(err)
         
         return next({
-            // error wordt doorgestuurd naar de error handler in index.js
+            // error is send to the error handler in index.js
             status: 400,
             message: err.message,
             data: {}
@@ -67,7 +67,6 @@ const validateMeal = (req, res, next) => {
 
 // Meal routes
 router.post('/api/meal', validateToken, validateMeal, mealController.create)
-// router.put('/api/meal/:mealId', validateMeal ,mealController.changeMeal)
 router.get('/api/meal', mealController.getAll)
 router.get('/api/meal/:mealId', mealController.getById)
 router.delete('/api/meal/:mealId', validateToken, mealController.deleteMeal)
