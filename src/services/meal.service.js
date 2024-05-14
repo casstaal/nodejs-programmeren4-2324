@@ -4,16 +4,7 @@ var logger = require('tracer').console()
 
 const mealService = {
     create: (meal, cookId, callback) => {
-        // database.addMeal(meal, (err, data) => {
-        //     if (err) {
-        //         callback(err, null)
-        //     } else {
-        //         callback(null, {
-        //             message: `Meal created with id ${data.id}.`,
-        //             data: data
-        //         })
-        //     }
-        // })
+        
         const isActive = meal.isActive
         const isVega = meal.isVega
         const isVegan = meal.isVegan
@@ -26,8 +17,6 @@ const mealService = {
         const name = meal.name
         const description = meal.description
         // const allergenes = meal.allergenes
-
-        // database.checkUserData(user, false)
         
         db.getConnection(function (err, connection) {
 
@@ -41,18 +30,31 @@ const mealService = {
             connection.query(
                 'INSERT INTO `meal` (isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookID, name, description],
                 function (error, results, fields) {
-                    connection.release()
 
                     if (error) {
+                        connection.release()
                         logger.error(error)
                         callback(error, null)
                     } else {
-                        logger.debug(results)
-                        callback(null, {
-                            status: 200,
-                            message: `Added new meal: ${name}`,
-                            data: results
-                        })
+                        const mealId = results.insertId
+
+                        connection.query(
+                            'SELECT * FROM `meal` WHERE id = ?', [mealId],
+                            function (error, mealResults, fields) {
+                                connection.release()
+                                if (error) {
+                                    logger.error(error)
+                                    callback(error, null)
+                                } else {
+                                    logger.debug(mealResults[0])
+                                    callback(null, {
+                                        status: 201,
+                                        message: `Added new meal: ${name} with ID ${mealId}`,
+                                        data: mealResults[0]
+                                    })
+                                }
+                            }
+                        )
                     }
                 }
             )
@@ -60,17 +62,7 @@ const mealService = {
     },
 
     getAll: (callback) => {
-        // database.getAllMeals((err, data) => {
-        //     if (err) {
-        //         callback(err, null)
-        //     } else {
-        //         console.log(data)
-        //         callback(null, {
-        //             message: `Found ${data.length} meals.`,
-        //             data: data
-        //         })
-        //     }
-        // })
+        
         db.getConnection(function (err, connection) {
             if (err) {
                 logger.error(err)
@@ -80,7 +72,6 @@ const mealService = {
 
             connection.query(
                 'SELECT * FROM `meal`',
-                // 'SELECT id, firstName, lastName FROM `user`',
                 function (error, results, fields) {
                     connection.release()
 
@@ -90,6 +81,7 @@ const mealService = {
                     } else {
                         logger.debug(results)
                         callback(null, {
+                            status: 200,
                             message: `Found ${results.length} meals.`,
                             data: results
                         })
@@ -100,16 +92,7 @@ const mealService = {
     },
 
     getById: (mealId, callback) => {
-        // database.getMealById(mealId, (err, data) => {
-        //     if (err) {
-        //         callback(err, null)
-        //     } else {
-        //         callback(null, {
-        //             message: `Found meal with id ${mealId}`,
-        //             data: data
-        //         })
-        //     }
-        // })
+        
         db.getConnection(function (err, connection) {
             if (err) {
                 logger.error(err)
@@ -140,6 +123,7 @@ const mealService = {
                                 } else {
                                     logger.debug(results)
                                     callback(null, {
+                                        status: 200,
                                         message: `Found meal with id ${mealId} .`,
                                         data: results
                                     })
@@ -149,7 +133,8 @@ const mealService = {
                     } else {
                         logger.debug(results)
                         callback(null, {
-                            message: `The mealID: ${mealId} does not exist`,
+                            status: 404,
+                            message: `The meal with ID ${mealId} does not exist`,
                             data: {}
                          })
                     }
@@ -159,27 +144,6 @@ const mealService = {
     },
 
     deleteMeal: (mealId, userIdFromToken, callback) => {
-        // database.deleteMeal(mealId, (err, data) => {
-        //     if (err) {
-        //         callback(err, null)
-        //     } else {
-        //         callback(null, {
-        //             message: `Meal deleted with id ${mealId}.`,
-        //             data: data
-        //         })
-        //     }
-        // })
-        // let cookID
-
-        // this.getCookIdFromMealId(mealId, (error, cookId) => {
-        //     if(error) {
-        //         console.error('Error: ' + error)
-        //     } else {
-        //         cookID = cookId
-        //     }
-        // })
-
-        // console.log("CookId: " + cookID)
 
         db.getConnection(function (err, connection) {
             if (err) {
@@ -222,8 +186,9 @@ const mealService = {
                                                         } else {
                                                             logger.debug(results)
                                                             callback(null, {
-                                                                message: `Deleted meal with id ${mealId} .`,
-                                                                data: results
+                                                                status: 200,
+                                                                message: `Maaltijd met ID ${mealId} is verwijderd.`,
+                                                                data: {}
                                                             })
                                                         }
                                                     }
@@ -231,6 +196,7 @@ const mealService = {
                                             } else {
                                                 logger.debug(results)
                                                 callback(null, {
+                                                    status: 403,
                                                     message: `The user with ${userIdFromToken} doesn't have the authorization to delete this meal.`,
                                                     data: {}
                                                 })
@@ -241,7 +207,8 @@ const mealService = {
                                 } else {
                                     logger.debug(results)
                                     callback(null, {
-                                        message: `The mealID: ${mealId} does not exist`,
+                                        status: 404,
+                                        message: `The meal with ID ${mealId} does not exist`,
                                         data: {}
                                      })
                                 }
@@ -251,69 +218,7 @@ const mealService = {
 
             
         })
-    },
-
-    // changeMeal: (meal, mealId, callback) => {
-    //     database.changeMeal(meal, mealId, (err, data) => {
-    //         if (err) {
-    //             callback(err, null)
-    //         } else {
-    //             callback(null, {
-    //                 message: `Meal changed with id ${mealId}.`,
-    //                 data: data
-    //             })
-    //         }
-    //     })
-    // },
-
-    // function getCookIdFromMealId(mealId, callback) {
-    //     db.getConnection(function (err, connection) {
-    //         if (err) {
-    //             logger.error(err)
-    //             callback(err, null)
-    //             return
-    //         }
-
-    //         connection.query(
-    //             'SELECT COUNT(*) AS count FROM `meal` WHERE id = ?', [mealId],
-    //             function (error, results, fields) {
-    //                 connection.release()
-
-    //                 if (error) {
-    //                     logger.error(error)
-    //                     callback(error, null)
-    //                 } 
-                    
-    //                 //If the count is greater than 0, than the ID exists
-    //                 if(results[0].count > 0){
-    //                     connection.query(
-    //                         'SELECT cookId FROM `meal` WHERE id = ?', [mealId],
-    //                         function (error, results, fields) {
-    //                             connection.release()
-            
-    //                             if (error) {
-    //                                 logger.error(error)
-    //                                 callback(error, null)
-    //                             } else {
-    //                                 logger.debug(results)
-    //                                 callback(null, {
-    //                                     message: `Found cookId for meal with id ${mealId} .`,
-    //                                     data: results
-    //                                 })
-    //                             }
-    //                         }
-    //                     )
-    //                 } else {
-    //                     logger.debug(results)
-    //                     callback(null, {
-    //                         message: `The mealID: ${mealId} does not exist`,
-    //                         data: {}
-    //                      })
-    //                 }
-    //             }
-    //         )
-    //     })
-    // }
+    }
 }
 
 module.exports = mealService

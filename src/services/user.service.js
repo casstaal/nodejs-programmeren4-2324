@@ -196,7 +196,7 @@ const userService = {
                         logger.debug(results)
                         callback(null, {
                             status: 404,
-                            message: `The ID: ${userId} does not exist`,
+                            message: `The user with ID ${userId} does not exist`,
                             data: {}
                          })
                     }
@@ -258,7 +258,7 @@ const userService = {
                         logger.debug(countResults)
                         callback(null, {
                             status: 404,
-                            message: `The ID: ${userId} does not exist`,
+                            message: `The user with ID ${userId} does not exist`,
                             data: {}
                          })
                     }
@@ -322,7 +322,7 @@ const userService = {
                                                     logger.debug(userResults[0])
                                                     callback(null, {
                                                         status: 201,
-                                                        message: `Update user with id ${userId}`,
+                                                        message: `Updated user with id ${userId}`,
                                                         data: userResults[0]
                                                     })
                                                 }
@@ -347,7 +347,7 @@ const userService = {
                         logger.debug(results)
                         callback(null, {
                             status: 404,
-                            message: `The ID: ${userId} does not exist`,
+                            message: `The user with ID ${userId} does not exist`,
                             data: {}
                          })
                     }
