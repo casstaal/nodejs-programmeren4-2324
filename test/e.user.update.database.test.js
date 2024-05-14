@@ -40,7 +40,7 @@ const INSERT_USER =
 //     "(1, 'Meal A', 'description', 'image url', NOW(), 5, 6.50, 1)," +
 //     "(2, 'Meal B', 'description', 'image url', NOW(), 5, 6.50, 1);"
 
-describe('UC204 Opvragen van usergegevens bij ID', () => {
+describe('UC205 Updaten van usergegevens', () => {
     //
     // informatie over before, after, beforeEach, afterEach:
     // https://mochajs.org/#hooks
@@ -53,7 +53,7 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
         done()
     })
 
-    describe('UC204 Opvragen van usergegevens bij ID', () => {
+    describe('UC205 Updaten van usergegevens', () => {
         //
         beforeEach((done) => {
             logger.debug('beforeEach called')
@@ -134,10 +134,10 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    // chai.expect(res).to.have.status(400)
-                    // chai.expect(res).not.to.have.status(200)
+                    chai.expect(res).to.have.status(403)
+                    chai.expect(res).not.to.have.status(200)
                     chai.expect(res.body).to.be.a('object')
-                    // chai.expect(res.body).to.have.property('status').equals(400)
+                    chai.expect(res.body).to.have.property('status').equals(403)
                     chai.expect(res.body)
                         .to.have.property('message')
                         .equals('The user 1 is not the owner of user 2')
@@ -170,10 +170,10 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    chai.expect(res).to.have.status(500)
+                    chai.expect(res).to.have.status(400)
                     chai.expect(res).not.to.have.status(200)
                     chai.expect(res.body).to.be.a('object')
-                    chai.expect(res.body).to.have.property('status').equals(500)
+                    chai.expect(res.body).to.have.property('status').equals(400)
                     chai.expect(res.body)
                         .to.have.property('message')
                         .equals('The phone number is not valid. An example of a valid phone number is: +31672344624')
@@ -206,13 +206,13 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
                     /**
                      * Voorbeeld uitwerking met chai.expect
                      */
-                    // chai.expect(res).to.have.status(401)
-                    // chai.expect(res).not.to.have.status(200)
+                    chai.expect(res).to.have.status(404)
+                    chai.expect(res).not.to.have.status(200)
                     chai.expect(res.body).to.be.a('object')
-                    // chai.expect(res.body).to.have.property('status').equals(401)
+                    chai.expect(res.body).to.have.property('status').equals(404)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('The ID: 111 does not exist')
+                        .equals('The user with ID 111 does not exist')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
@@ -277,24 +277,27 @@ describe('UC204 Opvragen van usergegevens bij ID', () => {
                 })
                 .end((err, res) => {
                     // res.should.have.status(200)
-                    res.body.should.be.a('object')
+                    // res.body.should.be.a('object')
+                    chai.expect(res).to.have.status(200)
+                    chai.expect(res).not.to.have.status(401)
+                    chai.expect(res.body).to.be.a('object')
+                    chai.expect(res.body).to.have.property('status').equals(200)
     
                     res.body.should.have.property('data').that.is.a('object')
-                    res.body.should.have.property('message').that.is.a('string').equals('Updated user with ID: 1')
+                    res.body.should.have.property('message').that.is.a('string').equals('Updated user with id 1')
     
-                    // const data = res.body.data
-                    // data.should.have.property('firstName').equals('Henk')
-                    // data.should.have.property('lastName').equals('Jan')
-                    // data.should.have.property('emailAdress').equals('henk_jan@server.nl')
-                    // data.should.have.property('isActive').that.is.a('boolean')
-                    // data.should.have.property('password').equals('testPassword2$')
-                    // data.should.have.property('phoneNumber').equals('+31 612345678')
-                    // data.should.have.property('roles').equals('chef')
-                    // data.should.have.property('street').equals('Hogeschoollaan')
-                    // data.should.have.property('city').equals('Breda')
-                    // data.should.have.property('postalCode').equals('3825 NK')
+                    const data = res.body.data
+                    data.should.have.property('firstName').equals('Henk')
+                    data.should.have.property('lastName').equals('Jan')
+                    data.should.have.property('emailAdress').equals('henk_jan@server.nl')
+                    data.should.have.property('isActive').that.is.a('number')
+                    data.should.have.property('password').equals('testPassword2$')
+                    data.should.have.property('phoneNumber').equals('+31 612345678')
+                    data.should.have.property('roles').equals('chef')
+                    data.should.have.property('street').equals('Hogeschoollaan')
+                    data.should.have.property('city').equals('Breda')
     
-                    // data.should.have.property('id').that.is.a('number')
+                    data.should.have.property('id').that.is.a('number')
     
                     done()
                 })

@@ -29,22 +29,22 @@ const validateMeal = (req, res, next) => {
             typeof description === 'string',
             'Description is missing or is not a string'
         )
-        // assert(
-        //     typeof isActive === 'number',
-        //     'IsActive is missing or is not a number (0/1)'
-        // )
-        // assert(
-        //     typeof isVega === 'number',
-        //     'IsVega is missing or is not a number (0/1)'
-        // )
-        // assert(
-        //     typeof isVegan === 'number',
-        //     'IsVegan is missing or is not a number (0/1)'
-        // )
-        // assert(
-        //     typeof isToTakeHome === 'number',
-        //     'IsToTakeHome is missing or is not a number (0/1)'
-        // )
+        assert(
+            typeof isActive === 'number',
+            'IsActive is missing or is not a number (0 = false / 1 = true)'
+        )
+        assert(
+            typeof isVega === 'number',
+            'IsVega is missing or is not a number (0 = false / 1 = true)'
+        )
+        assert(
+            typeof isVegan === 'number',
+            'IsVegan is missing or is not a number (0 = false / 1 = true)'
+        )
+        assert(
+            typeof isToTakeHome === 'number',
+            'IsToTakeHome is missing or is not a number (0 = false / 1 = true)'
+        )
         assert(typeof price === 'number', 'Price is missing or is not a number')
         assert(typeof dateTime === 'string', 'DateTime is missing or is not a string')
         assert(typeof maxAmountOfParticipants === 'number', 'MaxAmountOfParticipants is missing or is not a number')

@@ -224,35 +224,35 @@ describe('UC201 Registreren als nieuwe user', () => {
                     firstName: 'Voornaam',
                     lastName: 'Achternaam',
                     emailAdress: 'test@server.nl',
-                    isActive: true,
+                    isActive: 1,
                     password: 'testPassword2$',
                     phoneNumber: '+31 612345678',
                     roles: 'chef',
                     street: 'Hogeschoollaan',
-                    city: 'Breda',
-                    postalCode: '3825 NK'
+                    city: 'Breda'
     
                 })
                 .end((err, res) => {
-                    res.should.have.status(200)
-                    res.body.should.be.a('object')
+                    chai.expect(res).to.have.status(201)
+                    chai.expect(res).not.to.have.status(500)
+                    chai.expect(res.body).to.be.a('object')
+                    chai.expect(res.body).to.have.property('status').equals(201)
     
                     res.body.should.have.property('data').that.is.a('object')
                     res.body.should.have.property('message').that.is.a('string')
     
-                    // const data = res.body.data
-                    // data.should.have.property('firstName').equals('Voornaam')
-                    // data.should.have.property('lastName').equals('Achternaam')
-                    // data.should.have.property('emailAdress').equals('test@server.nl')
-                    // data.should.have.property('isActive').that.is.a('boolean')
-                    // data.should.have.property('password').equals('testPassword2$')
-                    // data.should.have.property('phoneNumber').equals('+31 612345678')
-                    // data.should.have.property('roles').equals('chef')
-                    // data.should.have.property('street').equals('Hogeschoollaan')
-                    // data.should.have.property('city').equals('Breda')
-                    // data.should.have.property('postalCode').equals('3825 NK')
+                    const data = res.body.data
+                    data.should.have.property('firstName').equals('Voornaam')
+                    data.should.have.property('lastName').equals('Achternaam')
+                    data.should.have.property('emailAdress').equals('test@server.nl')
+                    data.should.have.property('isActive').that.is.a('number')
+                    data.should.have.property('password').equals('testPassword2$')
+                    data.should.have.property('phoneNumber').equals('+31 612345678')
+                    data.should.have.property('roles').equals('chef')
+                    data.should.have.property('street').equals('Hogeschoollaan')
+                    data.should.have.property('city').equals('Breda')
     
-                    // data.should.have.property('id').that.is.a('number')
+                    data.should.have.property('id').that.is.a('number')
     
                     done()
                 })

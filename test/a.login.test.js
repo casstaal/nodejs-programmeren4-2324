@@ -79,7 +79,7 @@ describe('UC101 Inloggen', () => {
 
         it('TC-101-1 Verplicht veld ontbreekt', (done) => {
             chai.request(server)
-                .post('/api/auth/login')
+                .post('/api/login')
                 .send({
                     // emailAdress: 'name@server.nl', ontbreekt
                     password: 'secret'
@@ -106,7 +106,7 @@ describe('UC101 Inloggen', () => {
 
         it('TC-101-2 Niet-valide wachtwoord', (done) => {
             chai.request(server)
-                .post('/api/auth/login')
+                .post('/api/login')
                 .send({
                     emailAdress: 'name@server.nl', 
                     password: 'testPassword'
@@ -133,7 +133,7 @@ describe('UC101 Inloggen', () => {
 
         it('TC-101-3 Gebruiker bestaat niet', (done) => {
             chai.request(server)
-                .post('/api/auth/login')
+                .post('/api/login')
                 .send({
                     emailAdress: 'test_name@server.nl', 
                     password: 'secret'
@@ -160,7 +160,7 @@ describe('UC101 Inloggen', () => {
 
         it('TC-101-4 Gebruiker succesvol ingelogd', (done) => {
             chai.request(server)
-                .post('/api/auth/login')
+                .post('/api/login')
                 .send({
                     emailAdress: 'name@server.nl', 
                     password: 'secret'
