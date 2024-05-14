@@ -16,7 +16,7 @@ const mealService = {
         const cookID = cookId
         const name = meal.name
         const description = meal.description
-        // const allergenes = meal.allergenes
+        const allergenes = meal.allergenes
         
         db.getConnection(function (err, connection) {
 
@@ -28,7 +28,7 @@ const mealService = {
 
 
             connection.query(
-                'INSERT INTO `meal` (isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookID, name, description],
+                'INSERT INTO `meal` (isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, allergenes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookID, name, description, allergenes],
                 function (error, results, fields) {
 
                     if (error) {
