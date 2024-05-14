@@ -158,7 +158,7 @@ describe('UC301 Toevoegen van maaltijd', () => {
                 imageUrl: 'testURL.nl',
                 name: 'Spaghetti',
                 description: 'Overheerlijke pasta',
-                allergenes: ["gluten", "lactose"]
+                allergenes: "gluten"
             })
             .end((err, res) => {
                 /**
