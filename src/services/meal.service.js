@@ -49,6 +49,7 @@ const mealService = {
                     } else {
                         logger.debug(results)
                         callback(null, {
+                            status: 200,
                             message: `Added new meal: ${name}`,
                             data: results
                         })
