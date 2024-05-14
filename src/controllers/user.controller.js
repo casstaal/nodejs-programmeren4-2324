@@ -136,7 +136,9 @@ let userController = {
         let myUserId = userId.substring(1)
         const numberUserId = parseInt(myUserId)
 
-        userService.getById(numberUserId, (error, success) => {
+        const userIdFromToken = req.userId
+
+        userService.getById(numberUserId, userIdFromToken, (error, success) => {
             if (error) {
                 return next({
                     status: error.status,
