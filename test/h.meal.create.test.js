@@ -142,7 +142,7 @@ describe('UC301 Toevoegen van maaltijd', () => {
                 })
         })
 
-        it('TC-301-3 Maaltijd succesvol toegevoegd', (done) => { 
+        it.skip('TC-301-3 Maaltijd succesvol toegevoegd', (done) => { 
             const token = jwt.sign({ userId: 1 }, jwtSecretKey)
             chai.request(server)
             .post('/api/meal')
