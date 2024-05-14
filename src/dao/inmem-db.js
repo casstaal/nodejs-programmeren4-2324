@@ -491,33 +491,35 @@ const database = {
         //[A-Z] matches any uppercase letter
         let upperCasePattern = /[A-Z]/
         //[a-z] matches any lowercase letter
-        let lowerCasePattern = /[a-z]/
+        // let lowerCasePattern = /[a-z]/
         //\d matches any digit character.
         let numberPattern = /\d/
         //[^A-Za-z0-9] is added to match any character that is not an uppercase letter, lowercase letter, or a digit.
-        let specialCharPattern = /[^A-Za-z0-9]/
+        // let specialCharPattern = /[^A-Za-z0-9]/
 
         return (
             password.length >= 8 &&
             upperCasePattern.test(password) &&
-            lowerCasePattern.test(password) &&
-            numberPattern.test(password) &&
-            specialCharPattern.test(password)
+            // lowerCasePattern.test(password) &&
+            numberPattern.test(password) 
+            // specialCharPattern.test(password)
         )
     },
 
     checkIfEmailIsValid(email) { 
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        const regex = /^[a-zA-Z]{0,1}\.[a-zA-Z]{2,}@[a-zA-Z]{2,}+\.[a-zA-Z]{2,3}$/
         return regex.test(email);
     },
 
-    validatePostalCode(postalCode) {
-        const regex = /^[1-9][0-9]{3} ?(?!sa|sd|ss)[A-Z]{2}$/
-        return regex.test(postalCode)
-    },
+    // validatePostalCode(postalCode) {
+    //     const regex = /^[1-9][0-9]{3} ?(?!sa|sd|ss)[A-Z]{2}$/
+    //     return regex.test(postalCode)
+    // },
 
     validatePhoneNumber(phoneNumber) {
-        const regex = /^\(?([+]31|0031|0)? -?6(\s?|-) ?([0-9]\s{0,3}){8}$/
+        // const regex = /^\(?([+]31|0031|0)? -?6(\s?|-) ?([0-9]\s{0,3}){8}$/
+        const regex = /^06[-\s]?\d{8}$/
         return regex.test(phoneNumber)
     },
 

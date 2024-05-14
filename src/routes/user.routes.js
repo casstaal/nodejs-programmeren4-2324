@@ -33,8 +33,8 @@ const validateUser = (req, res, next) => {
             'Email address is missing or is not a string'
         )
         // assert(
-        //     typeof isActive === 'boolean',
-        //     'isActive is missing or is not a boolean'
+        //     typeof isActive === 'number' && (isActive === 0 || isActive === 1),
+        //     'isActive is missing or is not a correct number (0 = false / 1 = true)'
         // )
         assert(
             typeof password === 'string',
@@ -50,7 +50,6 @@ const validateUser = (req, res, next) => {
             'Street is missing or is not a string'
         )
         assert(typeof city === 'string', 'City is missing or is not a string')
-        // assert(typeof postalCode === 'string', 'Postalcode is missing or is not a string')
         next()
     } catch (err) {
         console.log(err)

@@ -18,7 +18,6 @@ const validateMeal = (req, res, next) => {
         price,
         imageUrl,
         allergenes,
-        participants
     } = meal
     try {
         assert(
@@ -29,22 +28,22 @@ const validateMeal = (req, res, next) => {
             typeof description === 'string',
             'Description is missing or is not a string'
         )
-        assert(
-            typeof isActive === 'number',
-            'IsActive is missing or is not a number (0 = false / 1 = true)'
-        )
-        assert(
-            typeof isVega === 'number',
-            'IsVega is missing or is not a number (0 = false / 1 = true)'
-        )
-        assert(
-            typeof isVegan === 'number',
-            'IsVegan is missing or is not a number (0 = false / 1 = true)'
-        )
-        assert(
-            typeof isToTakeHome === 'number',
-            'IsToTakeHome is missing or is not a number (0 = false / 1 = true)'
-        )
+        // assert(
+        //     typeof isActive === 'number' && (isActive === 0 || isActive === 1),
+        //     'IsActive is missing or is not a correct number (0 = false / 1 = true)'
+        // )
+        // assert(
+        //     typeof isVega === 'number' && (isVega === 0 || isVega === 1),
+        //     'IsVega is missing or is not a correct number (0 = false / 1 = true)'
+        // )
+        // assert(
+        //     typeof isVegan === 'number' && (isVegan === 0 || isVegan === 1),
+        //     'IsVegan is missing or is not a correct number (0 = false / 1 = true)'
+        // )
+        // assert(
+        //     typeof isToTakeHome === 'number' && (isToTakeHome === 0 || isToTakeHome === 1),
+        //     'IsToTakeHome is missing or is not a correct number (0 = false / 1 = true)'
+        // )
         assert(typeof price === 'number', 'Price is missing or is not a number')
         assert(typeof dateTime === 'string', 'DateTime is missing or is not a string')
         assert(typeof maxAmountOfParticipants === 'number', 'MaxAmountOfParticipants is missing or is not a number')
@@ -52,10 +51,7 @@ const validateMeal = (req, res, next) => {
             typeof imageUrl === 'string',
             'ImageUrl is missing or is not a string'
         )
-        assert(Array.isArray(allergenes), 'Allergenes is missing or is not an array')
-        // Moet als het goed is automatisch toegevoegd worden bij het aanmaken van een maaltijd
-        // assert(typeof cook === 'object', 'Cook is missing or is not an object')
-        // assert(Array.isArray(participants), 'Participants is missing or is not an array')
+        // assert(Array.isArray(allergenes), 'Allergenes is missing or is not an array')
         next()
     } catch (err) {
         console.log(err)
