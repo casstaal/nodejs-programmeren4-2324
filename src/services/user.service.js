@@ -246,7 +246,7 @@ const userService = {
                                 }
                             )
                         } else {
-                            logger.debug(deleteResults)
+                            // logger.debug(deleteResults)
                             callback(null, {
                                 status: 403,
                                 message: `The user ${userIdFromToken} is not the owner of user ${userId}`,

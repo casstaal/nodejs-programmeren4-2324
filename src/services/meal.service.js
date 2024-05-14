@@ -71,7 +71,8 @@ const mealService = {
             }
 
             connection.query(
-                'SELECT * FROM `meal`',
+                //Using a LEFT JOIN to ensure that every meal is returned.
+                'SELECT * FROM `meal` LEFT JOIN `user` ON meal.cookId = user.id',
                 function (error, results, fields) {
                     connection.release()
 
@@ -79,11 +80,40 @@ const mealService = {
                         logger.error(error)
                         callback(error, null)
                     } else {
+                        //Get the results that you want to return
+                        const formattedResults = results.map(meal => {
+                            return {
+                                id: meal.id,
+                                isActive: meal.isActive,
+                                isVega: meal.isVega,
+                                isVegan: meal.isVegan,
+                                isToTakeHome: meal.isToTakeHome,
+                                dateTime: meal.dateTime,
+                                maxAmountOfParticipants: meal.maxAmountOfParticipants,
+                                price: meal.price,
+                                imageUrl: meal.imageUrl,
+                                cook: {
+                                    id: meal.cookId,
+                                    firstName: meal.firstName,
+                                    lastName: meal.lastName,
+                                    email: meal.emailAdress,
+                                    phoneNumber: meal.phoneNumber,
+                                    roles: meal.roles,
+                                    street: meal.street,
+                                    city: meal.city
+                                },
+                                createDate: meal.createDate,
+                                updateDate: meal.updateDate,
+                                name: meal.name,
+                                description: meal.description,
+                                allergenes: meal.allergenes
+                            };
+                        });
                         logger.debug(results)
                         callback(null, {
                             status: 200,
-                            message: `Found ${results.length} meals.`,
-                            data: results
+                            message: `Found ${formattedResults.length} meals.`,
+                            data: formattedResults
                         })
                     }
                 }
@@ -113,7 +143,7 @@ const mealService = {
                     //If the count is greater than 0, than the ID exists
                     if(results[0].count > 0){
                         connection.query(
-                            'SELECT * FROM `meal` WHERE id = ?', [mealId],
+                            'SELECT * FROM `meal` LEFT JOIN `user` ON meal.cookId = user.id WHERE meal.id = ?', [mealId],
                             function (error, results, fields) {
                                 connection.release()
             
@@ -121,11 +151,40 @@ const mealService = {
                                     logger.error(error)
                                     callback(error, null)
                                 } else {
+                                    //Get the results that you want to return
+                                    const formattedResults = results.map(meal => {
+                                        return {
+                                            id: meal.id,
+                                            isActive: meal.isActive,
+                                            isVega: meal.isVega,
+                                            isVegan: meal.isVegan,
+                                            isToTakeHome: meal.isToTakeHome,
+                                            dateTime: meal.dateTime,
+                                            maxAmountOfParticipants: meal.maxAmountOfParticipants,
+                                            price: meal.price,
+                                            imageUrl: meal.imageUrl,
+                                            cook: {
+                                                id: meal.cookId,
+                                                firstName: meal.firstName,
+                                                lastName: meal.lastName,
+                                                email: meal.emailAdress,
+                                                phoneNumber: meal.phoneNumber,
+                                                roles: meal.roles,
+                                                street: meal.street,
+                                                city: meal.city
+                                            },
+                                            createDate: meal.createDate,
+                                            updateDate: meal.updateDate,
+                                            name: meal.name,
+                                            description: meal.description,
+                                            allergenes: meal.allergenes
+                                        };
+                                    });
                                     logger.debug(results)
                                     callback(null, {
                                         status: 200,
                                         message: `Found meal with id ${mealId} .`,
-                                        data: results
+                                        data: formattedResults
                                     })
                                 }
                             }
