@@ -211,7 +211,7 @@ describe('UC201 Registreren als nieuwe user', () => {
                     chai.expect(res.body).to.have.property('status').equals(500)
                     chai.expect(res.body)
                         .to.have.property('message')
-                        .equals('Duplicate entry \'h.huizinga@server.nl\' for key \'IDX_87877a938268391a71723b303c\'')
+                        .equals('Duplicate entry \'h.huizinga@server.nl\' for key \'user.IDX_87877a938268391a71723b303c\'')
                     chai
                         .expect(res.body)
                         .to.have.property('data')
